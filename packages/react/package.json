@@ -1,6 +1,6 @@
 {
   "name": "@auto-skeleton/react",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,8 +12,12 @@
     },
     "./styles.css": "./dist/styles.css"
   },
-  "files": ["dist"],
-  "sideEffects": ["**/*.css"],
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "**/*.css"
+  ],
   "scripts": {
     "build": "tsup && cp src/styles.css dist/styles.css",
     "typecheck": "tsc -p tsconfig.json --noEmit"
@@ -23,6 +27,6 @@
     "react-dom": ">=18"
   },
   "dependencies": {
-    "@auto-skeleton/core": "0.0.1"
+    "@auto-skeleton/core": "0.0.2"
   }
 }
