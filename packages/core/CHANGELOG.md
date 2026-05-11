@@ -1,5 +1,11 @@
 # @auto-skeleton/core
 
+## 0.0.3
+
+### Patch Changes
+
+- Add README to both packages for npm documentation pages.
+
 ## 0.0.2
 
 ### Patch Changes

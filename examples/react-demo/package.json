@@ -1,7 +1,7 @@
 {
   "name": "react-demo",
   "private": true,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "scripts": {
     "dev": "vite",
@@ -9,7 +9,7 @@
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "dependencies": {
-    "@auto-skeleton/react": "0.0.2",
+    "@auto-skeleton/react": "0.0.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

@@ -1,6 +1,6 @@
 {
   "name": "@auto-skeleton/react",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -13,7 +13,8 @@
     "./styles.css": "./dist/styles.css"
   },
   "files": [
-    "dist"
+    "dist",
+    "README.md"
   ],
   "sideEffects": [
     "**/*.css"
@@ -27,6 +28,6 @@
     "react-dom": ">=18"
   },
   "dependencies": {
-    "@auto-skeleton/core": "0.0.2"
+    "@auto-skeleton/core": "0.0.3"
   }
 }
