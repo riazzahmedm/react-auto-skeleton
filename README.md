@@ -2,6 +2,8 @@
 
 Zero-config skeleton loaders for React. Wraps any component and auto-generates a pixel-accurate skeleton by scanning the real DOM — no manual shape definitions needed.
 
+**[Live demo →](https://riazzahmedm.github.io/react-auto-skeleton/)**
+
 ```tsx
 <AutoSkeleton id="profile" loading={isLoading}>
   <ProfileCard />
