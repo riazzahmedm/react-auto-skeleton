@@ -5,13 +5,13 @@ import { useAutoSkeleton } from "./useAutoSkeleton";
 import "./styles.css";
 
 export function AutoSkeleton({ id, loading, children, className, options }: AutoSkeletonProps) {
-  const { rootRef, bones, animation, debug, shouldShow, rootClassName } = useAutoSkeleton({
+  const { rootRef, bones, animation, debug, shouldShow } = useAutoSkeleton({
     id,
     loading,
     options
   });
 
-  const classes = [rootClassName, className, shouldShow ? "as-loading" : ""]
+  const classes = ["as-root", className, shouldShow ? "as-loading" : ""]
     .filter(Boolean)
     .join(" ");
 

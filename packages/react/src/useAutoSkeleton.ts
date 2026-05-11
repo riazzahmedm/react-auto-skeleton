@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { scanBones, type Bone } from "@auto-skeleton/core";
 import { clearCachedBones, getCachedBones, setCachedBones } from "./cache";
 import type { AutoSkeletonOptions } from "./types";
@@ -17,7 +17,7 @@ export function useAutoSkeleton({
   const [bones, setBones] = useState<Bone[] | null>(() => (cacheEnabled ? getCachedBones(id) : null));
   const scanTimerRef = useRef<number | null>(null);
 
-  function runScan(): void {
+  const runScan = useCallback(() => {
     if (!rootRef.current) return;
     const next = scanBones(rootRef.current, {
       ignoreSelectors: options?.ignoreSelectors,
@@ -25,13 +25,13 @@ export function useAutoSkeleton({
     });
     setBones(next);
     setCachedBones(id, next, cacheEnabled);
-  }
+  }, [id, options?.ignoreSelectors, options?.minSize, cacheEnabled]);
 
   useEffect(() => {
     if (!rootRef.current) return;
     if (loading) return;
     runScan();
-  }, [id, loading, options?.ignoreSelectors, options?.minSize, cacheEnabled]);
+  }, [loading, runScan]);
 
   useEffect(() => {
     if (!cacheEnabled) clearCachedBones(id);
@@ -83,20 +83,17 @@ export function useAutoSkeleton({
       mutationObserver.disconnect();
       resizeObserver.disconnect();
     };
-  }, [id, loading, options?.watch, options?.watchDebounceMs, options?.ignoreSelectors, options?.minSize, cacheEnabled]);
+  }, [loading, runScan, options?.watch, options?.watchDebounceMs]);
 
   const animation = options?.animation ?? "wave";
   const debug = options?.debug ?? false;
   const shouldShow = loading && !!bones && bones.length > 0;
-
-  const rootClassName = useMemo(() => "as-root", []);
 
   return {
     rootRef,
     bones,
     animation,
     debug,
-    shouldShow,
-    rootClassName
+    shouldShow
   };
 }
