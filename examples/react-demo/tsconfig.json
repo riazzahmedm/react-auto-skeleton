@@ -1,0 +1,12 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@auto-skeleton/core": ["../../packages/core/src/index.ts"],
+      "@auto-skeleton/react": ["../../packages/react/src/index.ts"]
+    },
+    "types": ["vite/client", "node"]
+  },
+  "include": ["src", "vite.config.ts"]
+}

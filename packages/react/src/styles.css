@@ -1,0 +1,67 @@
+:root {
+  --as-base: #e4e4e7;
+  --as-highlight: rgba(255, 255, 255, 0.9);
+  --as-debug: rgba(255, 99, 71, 0.45);
+}
+
+.as-root {
+  position: relative;
+}
+
+.as-root.as-loading > :not(.as-overlay) {
+  visibility: hidden;
+}
+
+.as-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.as-bone {
+  position: absolute;
+  background: var(--as-base);
+  overflow: hidden;
+}
+
+.as-bone.as-wave::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent 0%, var(--as-highlight) 45%, transparent 100%);
+  animation: as-wave 1.2s infinite;
+}
+
+.as-bone.as-pulse {
+  animation: as-pulse 1.1s ease-in-out infinite;
+}
+
+.as-bone.as-debug {
+  outline: 1px dashed var(--as-debug);
+  outline-offset: -1px;
+}
+
+@keyframes as-wave {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+@keyframes as-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .as-bone.as-wave::after,
+  .as-bone.as-pulse {
+    animation: none;
+  }
+}

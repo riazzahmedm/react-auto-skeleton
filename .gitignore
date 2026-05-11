@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.DS_Store
+*.js.map
+coverage/
+
+# Compiled artifacts in src (tsc side-effects)
+packages/*/src/*.js
+packages/*/src/*.d.ts
