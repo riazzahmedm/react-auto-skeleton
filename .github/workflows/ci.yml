@@ -22,6 +22,9 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Build core
+        run: npm run --workspace @auto-skeleton/core build
+
       - name: Typecheck
         run: npm run typecheck
 
