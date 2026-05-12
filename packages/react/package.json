@@ -1,6 +1,6 @@
 {
   "name": "@auto-skeleton/react",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -29,6 +29,6 @@
     "react-dom": ">=18"
   },
   "dependencies": {
-    "@auto-skeleton/core": "0.0.3"
+    "@auto-skeleton/core": "0.0.4"
   }
 }
