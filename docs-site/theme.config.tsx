@@ -25,6 +25,15 @@ const config: DocsThemeConfig = {
     </span>
   ),
 
+  banner: {
+    key: 'v0.0.5',
+    text: (
+      <a href="https://www.npmjs.com/package/@auto-skeleton/react?activeTab=versions" target="_blank" rel="noreferrer">
+        v0.0.5 — Zero-config runtime DOM scanning. No CLI, no config files. →
+      </a>
+    ),
+  },
+
   project: {
     link: 'https://github.com/riazzahmedm/react-auto-skeleton',
   },

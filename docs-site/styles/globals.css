@@ -80,17 +80,21 @@ body {
   color: #e2e8f0 !important;
 }
 
-/* active */
+/* active — left border indicator, no background */
 .nextra-sidebar-container li a[aria-current="page"],
 .nextra-sidebar-container li.active > a {
-  background: rgba(124,58,237,0.1) !important;
+  background: transparent !important;
   color: #7c3aed !important;
   font-weight: 500 !important;
+  border-left: 2px solid #7c3aed !important;
+  border-radius: 0 !important;
+  padding-left: 10px !important;
 }
 .dark .nextra-sidebar-container li a[aria-current="page"],
 .dark .nextra-sidebar-container li.active > a {
-  background: rgba(124,58,237,0.12) !important;
+  background: transparent !important;
   color: #a78bfa !important;
+  border-left-color: #a78bfa !important;
 }
 
 /* section titles */
