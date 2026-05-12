@@ -398,6 +398,21 @@ function Hero() {
           >
             npm package ↗
           </a>
+          <a
+            href="/react-auto-skeleton/docs/getting-started"
+            style={{
+              display: "inline-flex", alignItems: "center", gap: 8,
+              padding: "11px 22px", borderRadius: 10,
+              background: "var(--btn-bg)", color: "var(--text)",
+              border: "1px solid var(--btn-border)",
+              fontSize: 14, fontWeight: 500, textDecoration: "none",
+              transition: "opacity 0.2s"
+            }}
+            onMouseEnter={e => (e.currentTarget.style.opacity = "0.7")}
+            onMouseLeave={e => (e.currentTarget.style.opacity = "1")}
+          >
+            Docs ↗
+          </a>
         </div>
 
         {/* Cycling card */}
