@@ -94,6 +94,7 @@ function DefaultCard() {
 function OverrideCard() {
   return (
     <article
+      className="as-override-card"
       data-skeleton-container
       style={{ ...cardStyle, display: "grid", gridTemplateColumns: "64px 1fr auto" }}
     >
@@ -127,6 +128,7 @@ function OverrideCard() {
 function ProfileHeader() {
   return (
     <header
+      className="as-profile-header"
       data-skeleton-container
       style={{ ...cardStyle, display: "grid", gridTemplateColumns: "80px 1fr auto" }}
     >
@@ -158,6 +160,7 @@ function ProfileHeader() {
 function MetricsStrip() {
   return (
     <section
+      className="as-metrics-strip"
       data-skeleton-container
       style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(100px, 1fr))", gap: 10 }}
     >

@@ -57,7 +57,7 @@ const LIGHT = `
 
 const GLOBAL = `
   *, *::before, *::after { box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; overflow-x: hidden; }
   body {
     margin: 0;
     background: var(--bg);
@@ -65,6 +65,7 @@ const GLOBAL = `
     font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
     transition: background 0.3s ease, color 0.3s ease;
     -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
   }
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(20px); }
@@ -82,6 +83,27 @@ const GLOBAL = `
   .fade-up-5 { animation-delay: 0.5s; }
   .fade-up-6 { animation-delay: 0.65s; }
   .hero-card-glow { animation: pulse-glow 3s ease-in-out infinite; }
+
+  /* ── Responsive ── */
+  @media (max-width: 600px) {
+    .as-nav-docs { display: none !important; }
+    .as-nav-badge { display: none !important; }
+    .as-stats { overflow-x: auto; flex-wrap: nowrap !important; justify-content: flex-start !important; padding-bottom: 4px; }
+    .as-stats::-webkit-scrollbar { display: none; }
+    .as-stats a { min-width: 80px; }
+    .as-how-step { grid-template-columns: 48px 1fr !important; gap: 16px !important; }
+    .as-step-body { grid-template-columns: 1fr !important; }
+    .as-step-code { display: none !important; }
+    .as-hiw-title h2 { font-size: clamp(18px, 5vw, 28px) !important; }
+    .as-metrics-strip { grid-template-columns: repeat(2, 1fr) !important; }
+    .as-profile-header { grid-template-columns: 60px 1fr !important; }
+    .as-profile-header > button { display: none !important; }
+    .as-override-card { grid-template-columns: 48px 1fr !important; }
+    .as-override-card > span[data-skeleton-ignore] { display: none !important; }
+  }
+  @media (max-width: 480px) {
+    .as-hero-install { flex-direction: column; align-items: flex-start !important; gap: 4px !important; }
+  }
 `;
 
 // ── Hero cycling card ────────────────────────────────────────────────────────
@@ -233,7 +255,7 @@ function Nav({ dark, onToggle, debug, onToggleDebug }: {
           }}>
             auto<span style={{ color: "var(--accent)" }}>-skeleton</span>
           </span>
-          <span style={{
+          <span className="as-nav-badge" style={{
             fontSize: 10, fontWeight: 600, padding: "2px 7px", borderRadius: 6,
             background: "rgba(124,58,237,0.12)", color: "var(--accent-light)",
             border: "1px solid rgba(124,58,237,0.18)", letterSpacing: "0.02em",
@@ -255,6 +277,7 @@ function Nav({ dark, onToggle, debug, onToggleDebug }: {
 
           <a
             href="/react-auto-skeleton/docs/getting-started"
+            className="as-nav-docs"
             style={{
               fontSize: 11, fontWeight: 500, padding: "5px 11px", borderRadius: 7,
               border: "1px solid transparent",
@@ -327,7 +350,7 @@ function Hero() {
         {/* Headline */}
         <h1 className="fade-up fade-up-2" style={{
           fontFamily: "'Clash Display', sans-serif", fontWeight: 800,
-          fontSize: "clamp(38px, 6.5vw, 66px)", lineHeight: 1.06,
+          fontSize: "clamp(28px, 6.5vw, 66px)", lineHeight: 1.06,
           letterSpacing: "-0.035em", color: "var(--text)",
           margin: "0 0 18px"
         }}>
@@ -364,7 +387,7 @@ function Hero() {
         </div>
 
         {/* Stats row */}
-        <div className="fade-up fade-up-4" style={{
+        <div className="fade-up fade-up-4 as-stats" style={{
           display: "flex", justifyContent: "center", gap: 0, marginBottom: 44
         }}>
           {[
@@ -495,7 +518,7 @@ function HowItWorks() {
       {/* Steps */}
       <div style={{ display: "flex", flexDirection: "column", gap: 2 }}>
         {HOW_STEPS.map((step, i) => (
-          <div key={step.num} style={{
+          <div key={step.num} className="as-how-step" style={{
             display: "grid",
             gridTemplateColumns: "80px 1fr",
             gap: 32,
@@ -511,7 +534,7 @@ function HowItWorks() {
             }}>{step.num}</div>
 
             {/* Content */}
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, alignItems: "start" }}>
+            <div className="as-step-body" style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 24, alignItems: "start" }}>
               <div>
                 <h3 style={{
                   fontFamily: "'Clash Display', sans-serif", fontWeight: 700,
@@ -525,7 +548,7 @@ function HowItWorks() {
               </div>
 
               {/* Code block */}
-              <div style={{
+              <div className="as-step-code" style={{
                 background: "var(--code-bg)", border: "1px solid var(--border)",
                 borderRadius: 10, overflow: "hidden"
               }}>
