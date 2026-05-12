@@ -1,0 +1,46 @@
+# Data Attributes
+
+Fine-tune how individual elements are scanned without changing render logic or passing extra props.
+
+## Reference
+
+| Attribute | Effect |
+|---|---|
+| `data-skeleton-ignore` | Skip this element and all its children entirely. |
+| `data-skeleton-shape="circle"` | Force a circular bone regardless of border-radius. |
+| `data-skeleton-shape="rect"` | Force a rectangular bone. |
+| `data-skeleton-lines="N"` | Force exactly N text-line bones instead of auto-detecting. |
+| `data-skeleton-container` | Treat as a layout container — scan children individually instead of creating one large bone for the whole element. |
+
+## Example
+
+```tsx
+<AutoSkeleton id="profile" loading={loading}>
+  <article data-skeleton-container>
+    {/* Circle bone from circular image */}
+    <img
+      src={avatar}
+      alt="avatar"
+      data-skeleton-shape="circle"
+      style={{ borderRadius: "50%" }}
+    />
+
+    <div>
+      {/* Single-line bone for heading */}
+      <h2 data-skeleton-lines="1">{name}</h2>
+
+      {/* Three-line bone for bio */}
+      <p data-skeleton-lines="3">{bio}</p>
+    </div>
+
+    {/* Badge skipped entirely */}
+    <span data-skeleton-ignore>Live</span>
+  </article>
+</AutoSkeleton>
+```
+
+## Tips
+
+- Use `data-skeleton-container` on flex/grid wrappers so each child gets its own bone instead of one rectangle covering the whole area.
+- Use `data-skeleton-ignore` on decorative icons, timestamps, or badges that don't need a placeholder.
+- `data-skeleton-lines` is especially useful for `<p>` elements — auto-detection counts actual text lines which can vary by screen width.

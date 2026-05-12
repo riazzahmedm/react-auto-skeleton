@@ -1,0 +1,59 @@
+# Theming
+
+`auto-skeleton` uses CSS custom properties for colours. Override them in your stylesheet to match your design system.
+
+## CSS variables
+
+| Variable | Default | Description |
+|---|---|---|
+| `--as-base` | `#e4e4e7` | Bone background colour. |
+| `--as-highlight` | `rgba(255,255,255,0.9)` | Wave shimmer colour. |
+
+## Light mode (default)
+
+```css
+:root {
+  --as-base: #e4e4e7;
+  --as-highlight: rgba(255, 255, 255, 0.9);
+}
+```
+
+## Dark mode
+
+```css
+:root {
+  --as-base: #1a1a2e;
+  --as-highlight: rgba(255, 255, 255, 0.06);
+}
+```
+
+Or scope it to a dark-mode class:
+
+```css
+.dark {
+  --as-base: #27272a;
+  --as-highlight: rgba(255, 255, 255, 0.05);
+}
+```
+
+## Tailwind example
+
+If you use Tailwind's `darkMode: 'class'`, add this to your global CSS:
+
+```css
+@layer base {
+  :root {
+    --as-base: theme(colors.zinc.200);
+    --as-highlight: rgba(255, 255, 255, 0.9);
+  }
+  .dark {
+    --as-base: theme(colors.zinc.800);
+    --as-highlight: rgba(255, 255, 255, 0.05);
+  }
+}
+```
+
+## Accessibility
+
+- The skeleton overlay is `aria-hidden="true"` — invisible to screen readers.
+- Wave and pulse animations are automatically disabled when `prefers-reduced-motion: reduce` is set.

@@ -1,0 +1,32 @@
+# How It Works
+
+`auto-skeleton` scans your real rendered DOM at runtime — no manual shapes, no CLI step, no JSON files.
+
+## Lifecycle
+
+1. **First render** — `loading` is `false`. The real content renders normally so the DOM is measurable.
+2. **Scan** — A `TreeWalker` traverses every visible element inside `<AutoSkeleton>`. Each element is measured with `getBoundingClientRect` and classified as a **rect**, **circle**, or **text block**.
+3. **Cache** — Bone positions are stored in memory and `sessionStorage`, keyed by `id` + viewport width.
+4. **Loading state** — When `loading` switches to `true`, an absolutely-positioned overlay renders the cached bones over hidden content (`visibility: hidden` preserves layout).
+5. **Reveal** — When `loading` flips back to `false`, the overlay unmounts and real content reappears.
+
+## Bone classification
+
+| Element type | Detected as |
+|---|---|
+| `<img>` with `border-radius: 50%` or `data-skeleton-shape="circle"` | Circle |
+| `<img>`, `<video>`, block elements | Rect |
+| Text nodes, `<p>`, `<span>`, headings | Text lines |
+
+## Caching
+
+Bones are cached in two layers:
+
+- **Memory** (`Map`) — instant lookup, cleared on page unload
+- **`sessionStorage`** — survives re-renders and hot reloads, keyed as `auto-skeleton:{id}::{viewportWidth}`
+
+On viewport resize, the cache is invalidated and a fresh scan runs automatically.
+
+## Watch mode
+
+When `options.watch` is `true` (default), a `ResizeObserver` watches the container for layout changes and schedules a re-scan with a debounce (default 120ms). This keeps bones accurate when content changes while not loading.

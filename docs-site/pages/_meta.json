@@ -1,0 +1,12 @@
+{
+  "index": {
+    "display": "hidden",
+    "title": "auto-skeleton"
+  },
+  "getting-started": "Getting Started",
+  "how-it-works": "How It Works",
+  "api-reference": "API Reference",
+  "data-attributes": "Data Attributes",
+  "theming": "Theming",
+  "nextjs": "Next.js"
+}

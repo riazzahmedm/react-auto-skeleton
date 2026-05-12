@@ -1,0 +1,75 @@
+# API Reference
+
+## `<AutoSkeleton>`
+
+The main component. Wraps any subtree and replaces it with a skeleton overlay when `loading` is `true`.
+
+```tsx
+import { AutoSkeleton } from "@auto-skeleton/react";
+
+<AutoSkeleton
+  id="unique-id"
+  loading={boolean}
+  className="..."
+  options={{ ... }}
+>
+  {children}
+</AutoSkeleton>
+```
+
+### Props
+
+| Prop | Type | Required | Description |
+|---|---|:---:|---|
+| `id` | `string` | ✅ | Unique cache key. Must be unique per instance on the page. |
+| `loading` | `boolean` | ✅ | When `true`, shows the skeleton overlay. |
+| `className` | `string` | | CSS class added to the root wrapper `<div>`. |
+| `options` | `AutoSkeletonOptions` | | Fine-tune scan and animation behaviour. |
+
+### `AutoSkeletonOptions`
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `animation` | `"wave" \| "pulse" \| "none"` | `"wave"` | Skeleton animation style. |
+| `debug` | `boolean` | `false` | Outline detected bones with dashed borders for debugging. |
+| `watch` | `boolean` | `true` | Re-scan when layout changes while not loading. |
+| `watchDebounceMs` | `number` | `120` | Debounce delay (ms) for watcher-triggered re-scans. |
+| `cache` | `boolean` | `true` | Cache bones in memory and `sessionStorage`. |
+| `minSize` | `number` | `8` | Minimum element dimension (px) to generate a bone for. |
+| `ignoreSelectors` | `string[]` | `[]` | CSS selectors for elements to skip during scan. |
+
+---
+
+## `useAutoSkeleton`
+
+Low-level hook for custom integrations. Returns the scan state and a ref to attach to your container.
+
+```tsx
+import { useAutoSkeleton } from "@auto-skeleton/react";
+
+function MyComponent({ loading }: { loading: boolean }) {
+  const { ref, bones, isScanning } = useAutoSkeleton({
+    id: "my-component",
+    loading,
+    options: { animation: "pulse" },
+  });
+
+  return <div ref={ref}>{/* your content */}</div>;
+}
+```
+
+### Parameters
+
+| Parameter | Type | Required | Description |
+|---|---|:---:|---|
+| `id` | `string` | ✅ | Unique cache key. |
+| `loading` | `boolean` | ✅ | Controls when bones are active. |
+| `options` | `AutoSkeletonOptions` | | Same options as `<AutoSkeleton>`. |
+
+### Returns
+
+| Property | Type | Description |
+|---|---|---|
+| `ref` | `RefObject<HTMLDivElement>` | Attach to the container element you want scanned. |
+| `bones` | `Bone[]` | Current array of detected bones. |
+| `isScanning` | `boolean` | `true` while a scan is in progress. |

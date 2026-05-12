@@ -1,0 +1,71 @@
+# Next.js
+
+`auto-skeleton` works with both the Pages Router and App Router.
+
+## App Router
+
+`AutoSkeleton` uses React hooks (`useEffect`, `useRef`) and must run on the client. Add `"use client"` to any component that renders `<AutoSkeleton>`:
+
+```tsx
+"use client";
+
+import { AutoSkeleton } from "@auto-skeleton/react";
+import "@auto-skeleton/react/styles.css";
+
+export function UserCard({ loading }: { loading: boolean }) {
+  return (
+    <AutoSkeleton id="user-card" loading={loading}>
+      <div>...</div>
+    </AutoSkeleton>
+  );
+}
+```
+
+import { Callout } from 'nextra/components'
+
+<Callout type="warning">
+  Do **not** use `<AutoSkeleton>` directly inside a Server Component. Wrap it in a Client Component first.
+</Callout>
+
+The package itself ships `"use client"` at the top of its entry point, so if you import it in a Client Component you do not need to add anything extra to the package — only your own wrapper file needs the directive.
+
+## Pages Router
+
+No extra setup required. Import and use `<AutoSkeleton>` like any other React component:
+
+```tsx
+import { AutoSkeleton } from "@auto-skeleton/react";
+import "@auto-skeleton/react/styles.css";
+
+export default function Page({ data, loading }) {
+  return (
+    <AutoSkeleton id="page-content" loading={loading}>
+      <main>...</main>
+    </AutoSkeleton>
+  );
+}
+```
+
+## Importing styles
+
+In the App Router, import styles in your root `layout.tsx`:
+
+```tsx
+// app/layout.tsx
+import "@auto-skeleton/react/styles.css";
+
+export default function RootLayout({ children }) {
+  return (
+    <html>
+      <body>{children}</body>
+    </html>
+  );
+}
+```
+
+In the Pages Router, import in `_app.tsx`:
+
+```tsx
+// pages/_app.tsx
+import "@auto-skeleton/react/styles.css";
+```

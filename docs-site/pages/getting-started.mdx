@@ -1,0 +1,50 @@
+# Getting Started
+
+## Installation
+
+```bash
+npm install @auto-skeleton/react
+```
+
+## Import styles
+
+Add the stylesheet once — typically in your root layout or `_app.tsx`:
+
+```tsx
+import "@auto-skeleton/react/styles.css";
+```
+
+## Quick start
+
+Wrap any component with `<AutoSkeleton>` and pass a `loading` boolean:
+
+```tsx
+import { AutoSkeleton } from "@auto-skeleton/react";
+import "@auto-skeleton/react/styles.css";
+
+function UserProfile({ userId }: { userId: string }) {
+  const { data, isLoading } = useUser(userId);
+
+  return (
+    <AutoSkeleton id="user-profile" loading={isLoading}>
+      <div className="profile">
+        <img src={data?.avatar} alt="avatar" />
+        <h2>{data?.name}</h2>
+        <p>{data?.bio}</p>
+      </div>
+    </AutoSkeleton>
+  );
+}
+```
+
+When `loading` is `true`, the real UI is replaced with a skeleton that mirrors its exact layout. When `loading` flips back to `false`, the real content reappears instantly from cache.
+
+## How the scan works
+
+On the first non-loading render, `auto-skeleton` scans the DOM inside `<AutoSkeleton>`, extracts bone positions, and caches them. Every subsequent loading state shows the skeleton immediately — no layout shift.
+
+import { Callout } from 'nextra/components'
+
+<Callout type="info">
+  The `id` prop must be unique per `<AutoSkeleton>` instance on the page. It is used as the cache key.
+</Callout>

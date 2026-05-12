@@ -32,8 +32,17 @@ jobs:
       - name: Install
         run: npm ci
 
+      - name: Build core
+        run: npm run --workspace @auto-skeleton/core build
+
       - name: Build demo
         run: npm run demo:build
+
+      - name: Build docs
+        run: npm run build --workspace docs-site
+
+      - name: Merge docs into demo dist
+        run: cp -r docs-site/out examples/react-demo/dist/docs
 
       - name: Setup Pages
         uses: actions/configure-pages@v5
