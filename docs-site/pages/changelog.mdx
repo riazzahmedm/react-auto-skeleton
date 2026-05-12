@@ -1,0 +1,40 @@
+# Changelog
+
+## v0.0.5 — May 2026
+
+### Fix
+
+Added `"use client"` directive to the package entry point for Next.js App Router compatibility. Previously, importing `@auto-skeleton/react` directly inside a Server Component would throw a runtime error. The directive is now bundled into both the ESM and CJS builds.
+
+---
+
+## v0.0.4 — May 2026
+
+### Fix
+
+Added `"license": "MIT"` to both `@auto-skeleton/react` and `@auto-skeleton/core` package.json files. The license field was missing from the published packages, causing npm to display "none" on the package page.
+
+---
+
+## v0.0.3 — May 2026
+
+### Features
+
+- **`AutoSkeleton` component** — wraps any subtree, scans the live DOM on first render, and replaces it with a pixel-accurate skeleton overlay when `loading` is `true`
+- **`useAutoSkeleton` hook** — low-level hook for custom integrations, returns `ref`, `bones`, and `isScanning`
+- **Data attribute overrides** — `data-skeleton-container`, `data-skeleton-shape`, `data-skeleton-lines`, `data-skeleton-ignore`
+- **Wave and pulse animations** — controlled via `options.animation`
+- **Dual-layer caching** — bones cached in memory and `sessionStorage`, keyed by `id` + viewport width
+- **Watch mode** — `ResizeObserver`-driven re-scan when layout changes while not loading
+- **Debug mode** — `options.debug` outlines detected bones with dashed borders
+- **CSS variable theming** — `--as-base` and `--as-highlight`
+- **Reduced motion support** — animations disabled automatically when `prefers-reduced-motion: reduce` is set
+- **`@auto-skeleton/core`** — framework-agnostic DOM scanner, published separately
+
+---
+
+## v0.0.2 — May 2026
+
+### Fix
+
+Switched build tooling from `tsc` to `tsup` with dual ESM + CJS output. The initial release output `.mjs` for ESM but the exports map expected `.js`, causing module resolution failures in bundlers.

@@ -1,0 +1,85 @@
+# auto-skeleton
+
+auto-skeleton is a zero-config skeleton loader library for React. It scans the real rendered DOM at runtime using getBoundingClientRect and generates a pixel-accurate skeleton overlay — no manual shape definitions, no CLI build step, no JSON files to maintain.
+
+## Installation
+
+npm install @auto-skeleton/react
+
+## Basic usage
+
+import { AutoSkeleton } from "@auto-skeleton/react";
+import "@auto-skeleton/react/styles.css";
+
+<AutoSkeleton id="unique-id" loading={isLoading}>
+  <YourComponent />
+</AutoSkeleton>
+
+The `id` prop must be unique per instance on the page. It is used as the cache key.
+
+## How it works
+
+1. On the first render where `loading` is false, auto-skeleton scans the DOM inside the wrapper using a TreeWalker.
+2. Each visible element is measured with getBoundingClientRect and classified as a rect, circle, or text block.
+3. Bones are cached in memory and sessionStorage keyed by `id` + viewport width.
+4. When `loading` switches to true, an absolutely-positioned overlay renders the cached bones over hidden content.
+5. When `loading` switches back to false, the overlay unmounts.
+
+## Props
+
+- id (string, required) — unique cache key
+- loading (boolean, required) — controls skeleton visibility
+- className (string, optional) — added to root wrapper div
+- options (object, optional) — see below
+
+## Options
+
+- animation: "wave" | "pulse" | "none" — default "wave"
+- debug: boolean — outline bones with dashed borders, default false
+- watch: boolean — re-scan on layout changes, default true
+- watchDebounceMs: number — debounce for re-scans, default 120
+- cache: boolean — enable sessionStorage caching, default true
+- minSize: number — minimum element size in px to create a bone, default 8
+- ignoreSelectors: string[] — CSS selectors to skip during scan, default []
+
+## Data attributes
+
+- data-skeleton-ignore — skip this element entirely
+- data-skeleton-shape="circle" — force a circular bone
+- data-skeleton-shape="rect" — force a rectangular bone
+- data-skeleton-lines="N" — force N text-line bones
+- data-skeleton-container — scan children individually instead of one large bone
+
+## Theming
+
+:root {
+  --as-base: #e4e4e7;
+  --as-highlight: rgba(255, 255, 255, 0.9);
+}
+
+.dark {
+  --as-base: #27272a;
+  --as-highlight: rgba(255, 255, 255, 0.05);
+}
+
+## Next.js App Router
+
+"use client";
+import { AutoSkeleton } from "@auto-skeleton/react";
+import "@auto-skeleton/react/styles.css";
+
+## useAutoSkeleton hook
+
+import { useAutoSkeleton } from "@auto-skeleton/react";
+
+const { ref, bones, isScanning } = useAutoSkeleton({
+  id: "my-component",
+  loading,
+  options: { animation: "pulse" },
+});
+
+## Common mistakes
+
+- Forgetting to import "@auto-skeleton/react/styles.css" — bones render with no animation
+- Using the same id for two different AutoSkeleton instances — they share the same cache
+- Using AutoSkeleton in a Next.js Server Component without "use client" — causes a runtime error

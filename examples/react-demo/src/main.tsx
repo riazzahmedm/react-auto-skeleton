@@ -265,6 +265,17 @@ function Nav({ dark, onToggle, debug, onToggleDebug }: {
             transition: "all 0.2s"
           }}>Debug</button>
           <a
+            href="/react-auto-skeleton/docs/getting-started"
+            style={{
+              fontSize: 12, fontWeight: 500, textDecoration: "none",
+              color: "var(--text-muted)", border: "1px solid var(--border)",
+              borderRadius: 999, padding: "4px 10px", whiteSpace: "nowrap",
+              background: "var(--chip-bg)", transition: "color 0.2s, border-color 0.2s"
+            }}
+            onMouseEnter={e => { e.currentTarget.style.color = "var(--text)"; e.currentTarget.style.borderColor = "var(--accent)"; }}
+            onMouseLeave={e => { e.currentTarget.style.color = "var(--text-muted)"; e.currentTarget.style.borderColor = "var(--border)"; }}
+          >Docs</a>
+          <a
             href="https://github.com/riazzahmedm/react-auto-skeleton"
             target="_blank" rel="noreferrer"
             style={{ color: "var(--text-muted)", display: "flex", alignItems: "center", transition: "color 0.2s" }}
