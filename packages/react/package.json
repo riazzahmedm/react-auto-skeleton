@@ -12,6 +12,7 @@
     },
     "./styles.css": "./dist/styles.css"
   },
+  "license": "MIT",
   "files": [
     "dist",
     "README.md"
