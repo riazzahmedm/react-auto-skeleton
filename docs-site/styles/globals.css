@@ -1,131 +1,260 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&family=JetBrains+Mono:wght@400;500&display=swap');
-@import url('https://api.fontshare.com/v2/css?f[]=clash-display@400,500,600,700,800&display=swap');
+/* ── Fonts ───────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@600,700,800&display=swap');
 
-/* ── Primary accent: purple ──────────────────────────────────────────── */
+/* ── Nextra primary color → purple ──────────────────────────────────────── */
 :root {
   --nextra-primary-hue: 262deg;
   --nextra-primary-saturation: 72%;
 }
 
-/* ── Base font ───────────────────────────────────────────────────────── */
+/* ── Base ────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+html { font-size: 15px; }
+
 body {
-  font-family: 'DM Sans', ui-sans-serif, system-ui, sans-serif !important;
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;
   -webkit-font-smoothing: antialiased;
+  font-feature-settings: 'cv02','cv03','cv04','cv11';
 }
 
-/* ── Headings use Clash Display ──────────────────────────────────────── */
-h1, h2, h3, h4 {
-  font-family: 'Clash Display', ui-sans-serif, system-ui, sans-serif !important;
-  letter-spacing: -0.025em !important;
-}
+/* ── Dark mode base colors ───────────────────────────────────────────────── */
+.dark body  { background-color: #08080f !important; }
+.dark .nextra-nav-container-blur { background-color: #08080f !important; }
 
-/* ── Code / pre ──────────────────────────────────────────────────────── */
-code, pre, kbd {
-  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
-}
-
-/* ── Navbar ──────────────────────────────────────────────────────────── */
-.nextra-nav-container {
+/* ── Navbar ──────────────────────────────────────────────────────────────── */
+.nextra-nav-container nav {
   border-bottom: 1px solid rgba(255,255,255,0.07) !important;
-  backdrop-filter: blur(14px) !important;
-  -webkit-backdrop-filter: blur(14px) !important;
+  height: 56px !important;
+  max-width: 100% !important;
+  padding: 0 24px !important;
 }
 
-.dark .nextra-nav-container {
-  background: rgba(7,7,15,0.85) !important;
+.dark .nextra-nav-container nav {
+  background: rgba(8,8,15,0.9) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
 }
 
-.nextra-nav-container-blur {
-  background: transparent !important;
-  box-shadow: none !important;
-}
-
-/* Nav logo font */
-nav a[href] > span {
-  font-family: 'Clash Display', sans-serif !important;
-  font-weight: 800 !important;
-  letter-spacing: -0.02em !important;
-}
-
-/* ── Dark mode background ────────────────────────────────────────────── */
-.dark body,
-.dark main {
-  background-color: #07070f !important;
-}
-
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
 .dark .nextra-sidebar-container {
-  background-color: #07070f !important;
-  border-right: 1px solid rgba(255,255,255,0.07) !important;
+  background-color: #08080f !important;
+  border-right: 1px solid rgba(255,255,255,0.06) !important;
 }
 
-/* ── Sidebar ─────────────────────────────────────────────────────────── */
+/* sidebar width */
 .nextra-sidebar-container {
-  font-family: 'DM Sans', sans-serif !important;
+  width: 240px !important;
+  padding-top: 16px !important;
 }
 
-/* active sidebar item */
-.dark li.active > a {
-  background: rgba(124, 58, 237, 0.12) !important;
+/* sidebar text */
+.nextra-sidebar-container li a,
+.nextra-sidebar-container li button {
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  font-family: 'Inter', sans-serif !important;
+  border-radius: 6px !important;
+  padding: 5px 10px !important;
+  letter-spacing: 0 !important;
+}
+
+/* sidebar section titles */
+.nextra-sidebar-container .nx-text-xs {
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+/* active link */
+.dark .nextra-sidebar-container li a[aria-current="page"],
+.dark .nextra-sidebar-container li a.active,
+.dark .nextra-sidebar-container li.active > a {
+  background: rgba(124,58,237,0.14) !important;
   color: #a78bfa !important;
+  font-weight: 500 !important;
 }
 
-/* ── Article content ─────────────────────────────────────────────────── */
+.dark .nextra-sidebar-container li a:hover:not([aria-current="page"]) {
+  background: rgba(255,255,255,0.04) !important;
+  color: inherit !important;
+}
+
+/* ── Content area ────────────────────────────────────────────────────────── */
+.nextra-content {
+  padding-top: 40px !important;
+  padding-bottom: 80px !important;
+}
+
+article {
+  max-width: 680px !important;
+}
+
+/* ── Headings ────────────────────────────────────────────────────────────── */
 article h1 {
-  font-size: clamp(28px, 4vw, 40px) !important;
-  font-weight: 800 !important;
-  line-height: 1.1 !important;
+  font-family: 'Clash Display', ui-sans-serif, sans-serif !important;
+  font-size: 2rem !important;
+  font-weight: 700 !important;
   letter-spacing: -0.03em !important;
+  line-height: 1.15 !important;
+  margin-bottom: 1.5rem !important;
 }
 
 article h2 {
-  font-weight: 700 !important;
-  font-size: 1.35rem !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 1.1rem !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+  margin-top: 2.5rem !important;
+  margin-bottom: 0.75rem !important;
 }
 
 article h3 {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.95rem !important;
   font-weight: 600 !important;
-  font-size: 1.1rem !important;
+  margin-top: 1.75rem !important;
 }
 
-/* ── Inline code ─────────────────────────────────────────────────────── */
-.dark :not(pre) > code {
-  background: rgba(124, 58, 237, 0.12) !important;
-  color: #a78bfa !important;
-  border: 1px solid rgba(124, 58, 237, 0.2) !important;
-  border-radius: 5px !important;
+/* paragraph spacing */
+article p {
+  font-size: 14px !important;
+  line-height: 1.75 !important;
+  color: #94a3b8 !important;
+}
+
+.dark article p { color: #8892a4 !important; }
+
+/* ── Inline code ─────────────────────────────────────────────────────────── */
+:not(pre) > code {
+  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+  font-size: 12px !important;
+  font-weight: 500 !important;
   padding: 2px 6px !important;
+  border-radius: 5px !important;
 }
 
-/* ── Code block header ───────────────────────────────────────────────── */
-.dark .nextra-code-block > div:first-child {
-  background: #0f0f1a !important;
-  border-bottom: 1px solid rgba(255,255,255,0.07) !important;
+.dark :not(pre) > code {
+  background: rgba(124,58,237,0.12) !important;
+  color: #a78bfa !important;
+  border: 1px solid rgba(124,58,237,0.2) !important;
+}
+
+/* ── Code blocks ─────────────────────────────────────────────────────────── */
+pre, code, kbd {
+  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+}
+
+pre {
+  font-size: 12.5px !important;
+  line-height: 1.7 !important;
+  border-radius: 10px !important;
+  border: 1px solid rgba(255,255,255,0.07) !important;
 }
 
 .dark pre {
-  background: #0d0d1a !important;
+  background: #0c0c18 !important;
 }
 
-/* ── Footer ──────────────────────────────────────────────────────────── */
-.dark footer {
-  border-top: 1px solid rgba(255,255,255,0.07) !important;
-  background: #07070f !important;
+/* code block title bar */
+.dark .nextra-code-block > div:first-child {
+  background: #0f0f1e !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11px !important;
 }
 
-/* ── Callout / note boxes ────────────────────────────────────────────── */
+/* ── Breadcrumb ──────────────────────────────────────────────────────────── */
+.nextra-breadcrumb {
+  font-size: 12px !important;
+  font-family: 'Inter', sans-serif !important;
+  margin-bottom: 8px !important;
+  opacity: 0.5 !important;
+}
+
+/* ── TOC (right sidebar) ─────────────────────────────────────────────────── */
+.nextra-toc {
+  font-size: 12px !important;
+  padding-top: 16px !important;
+}
+
+.nextra-toc ul li a {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12px !important;
+  line-height: 1.6 !important;
+  padding: 3px 0 !important;
+}
+
+.nextra-toc .nx-text-xs {
+  font-size: 10px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.08em !important;
+  text-transform: uppercase !important;
+  margin-bottom: 8px !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+/* ── Table ───────────────────────────────────────────────────────────────── */
+.dark table th {
+  background: rgba(255,255,255,0.04) !important;
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+}
+
+.dark table td, .dark table th {
+  border-color: rgba(255,255,255,0.07) !important;
+  font-size: 13px !important;
+}
+
+/* ── Callout ─────────────────────────────────────────────────────────────── */
 .dark .nextra-callout {
-  background: rgba(124,58,237,0.08) !important;
-  border-color: rgba(124,58,237,0.25) !important;
+  background: rgba(124,58,237,0.07) !important;
+  border-color: rgba(124,58,237,0.22) !important;
+  border-radius: 8px !important;
+  font-size: 13px !important;
 }
 
-/* ── Search ──────────────────────────────────────────────────────────── */
+/* ── Search ──────────────────────────────────────────────────────────────── */
 .dark .nextra-search input {
   background: rgba(255,255,255,0.04) !important;
   border: 1px solid rgba(255,255,255,0.08) !important;
-  font-family: 'DM Sans', sans-serif !important;
+  border-radius: 8px !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
 }
 
-/* ── Table of contents ───────────────────────────────────────────────── */
-.nextra-toc .nx-text-xs {
-  font-family: 'DM Sans', sans-serif !important;
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+.dark footer {
+  border-top: 1px solid rgba(255,255,255,0.06) !important;
+  background: #08080f !important;
 }
+
+footer .nx-flex {
+  font-size: 12px !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+/* ── Prev/Next nav ───────────────────────────────────────────────────────── */
+.dark .nextra-navigation-links a {
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  border-radius: 10px !important;
+  background: rgba(255,255,255,0.03) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+}
+
+.dark .nextra-navigation-links a:hover {
+  border-color: rgba(124,58,237,0.3) !important;
+  background: rgba(124,58,237,0.06) !important;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────────────────── */
+.dark ::-webkit-scrollbar { width: 5px; height: 5px; }
+.dark ::-webkit-scrollbar-track { background: transparent; }
+.dark ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 3px; }
+.dark ::-webkit-scrollbar-thumb:hover { background: rgba(255,255,255,0.18); }
