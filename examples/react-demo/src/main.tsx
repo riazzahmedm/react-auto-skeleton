@@ -212,11 +212,9 @@ const sectionLinks = [
   ["Media", "#media-card"]
 ] as const;
 
-function Nav({ dark, onToggle, loading, onToggleLoading, debug, onToggleDebug }: {
+function Nav({ dark, onToggle, debug, onToggleDebug }: {
   dark: boolean;
   onToggle: () => void;
-  loading: boolean;
-  onToggleLoading: () => void;
   debug: boolean;
   onToggleDebug: () => void;
 }) {
@@ -234,7 +232,7 @@ function Nav({ dark, onToggle, loading, onToggleLoading, debug, onToggleDebug }:
       }}>
         {/* Logo */}
         <span style={{
-          fontFamily: "'Syne', sans-serif", fontWeight: 800, fontSize: 15,
+          fontFamily: "'Clash Display', sans-serif", fontWeight: 800, fontSize: 15,
           color: "var(--text)", letterSpacing: "-0.02em", flexShrink: 0
         }}>
           auto<span style={{ color: "var(--accent)" }}>-skeleton</span>
@@ -266,12 +264,6 @@ function Nav({ dark, onToggle, loading, onToggleLoading, debug, onToggleDebug }:
             color: debug ? "var(--accent-light)" : "var(--text-muted)", cursor: "pointer",
             transition: "all 0.2s"
           }}>Debug</button>
-          <button type="button" onClick={onToggleLoading} style={{
-            fontSize: 11, fontWeight: 500, padding: "5px 10px", borderRadius: 6,
-            border: "1px solid var(--border)", background: loading ? "rgba(124,58,237,0.15)" : "var(--chip-bg)",
-            color: loading ? "var(--accent-light)" : "var(--text-muted)", cursor: "pointer",
-            transition: "all 0.2s"
-          }}>Loading</button>
           <a
             href="https://github.com/riazzahmedm/react-auto-skeleton"
             target="_blank" rel="noreferrer"
@@ -327,7 +319,7 @@ function Hero() {
 
         {/* Headline */}
         <h1 className="fade-up fade-up-2" style={{
-          fontFamily: "'Syne', sans-serif", fontWeight: 800,
+          fontFamily: "'Clash Display', sans-serif", fontWeight: 800,
           fontSize: "clamp(36px, 6vw, 62px)", lineHeight: 1.08,
           letterSpacing: "-0.03em", color: "var(--text)",
           margin: "0 0 20px"
@@ -440,7 +432,7 @@ function DemoSection({ id, title, description, children }: {
         <div>
           <h2 style={{
             margin: "0 0 2px", fontSize: 14, fontWeight: 600,
-            fontFamily: "'Syne', sans-serif", color: "var(--text)"
+            fontFamily: "'Clash Display', sans-serif", color: "var(--text)"
           }}>{title}</h2>
           <p style={{ margin: 0, fontSize: 12, color: "var(--text-muted)" }}>{description}</p>
         </div>
@@ -454,15 +446,8 @@ function DemoSection({ id, title, description, children }: {
 
 function DemoRoot() {
   const [dark, setDark] = useState(true);
-  const [loading, setLoading] = useState(true);
   const [debug, setDebug] = useState(false);
   const [showTop, setShowTop] = useState(false);
-
-  // Auto-reveal on load
-  useEffect(() => {
-    const t = window.setTimeout(() => setLoading(false), 1400);
-    return () => window.clearTimeout(t);
-  }, []);
 
   // Inject theme CSS
   useEffect(() => {
@@ -486,7 +471,6 @@ function DemoRoot() {
     <>
       <Nav
         dark={dark} onToggle={() => setDark(d => !d)}
-        loading={loading} onToggleLoading={() => setLoading(v => !v)}
         debug={debug} onToggleDebug={() => setDebug(v => !v)}
       />
       <Hero />
@@ -503,7 +487,7 @@ function DemoRoot() {
           Components
           <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
         </div>
-        <App loading={loading} debug={debug} DemoSection={DemoSection} />
+        <App debug={debug} DemoSection={DemoSection} />
       </main>
 
       {showTop && (

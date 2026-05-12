@@ -1,5 +1,47 @@
+import { useEffect, useRef, useState } from "react";
 import type { CSSProperties, ComponentType, ReactNode } from "react";
 import { AutoSkeleton } from "@auto-skeleton/react";
+
+// ── Scroll-triggered skeleton ─────────────────────────────────────────────────
+
+function ScrollSkeleton({ id, children, debug }: { id: string; children: ReactNode; debug: boolean }) {
+  const [loading, setLoading] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+  const revealed = useRef(false);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const el = ref.current;
+
+    // Brief content render so scanner can measure bones, then flip to loading
+    const scanTimer = window.setTimeout(() => {
+      setLoading(true);
+
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting && !revealed.current) {
+            revealed.current = true;
+            observer.disconnect();
+            window.setTimeout(() => setLoading(false), 1300);
+          }
+        },
+        { threshold: 0.2, rootMargin: "0px 0px -60px 0px" }
+      );
+      observer.observe(el);
+      return () => observer.disconnect();
+    }, 250);
+
+    return () => window.clearTimeout(scanTimer);
+  }, []);
+
+  return (
+    <div ref={ref}>
+      <AutoSkeleton id={id} loading={loading} options={{ debug }}>
+        {children}
+      </AutoSkeleton>
+    </div>
+  );
+}
 
 type DemoSectionProps = { id: string; title: string; description: string; children: ReactNode };
 
@@ -74,7 +116,7 @@ function ProfileHeader() {
         style={{ borderRadius: "50%" }}
       />
       <div>
-        <h3 data-skeleton-lines="1" style={{ margin: "0 0 5px", fontSize: 16, fontWeight: 700, color: "var(--text)", fontFamily: "'Syne', sans-serif" }}>
+        <h3 data-skeleton-lines="1" style={{ margin: "0 0 5px", fontSize: 16, fontWeight: 700, color: "var(--text)", fontFamily: "'Clash Display', sans-serif" }}>
           Growth Team
         </h3>
         <p data-skeleton-lines="1" style={{ margin: "0 0 10px", color: "var(--text-muted)", fontSize: 13 }}>
@@ -105,7 +147,7 @@ function MetricsStrip() {
           <p data-skeleton-lines="1" style={{ margin: "0 0 8px", color: "var(--text-muted)", fontSize: 12, fontWeight: 500 }}>
             {label}
           </p>
-          <p data-skeleton-lines="1" style={{ margin: 0, fontSize: 22, fontWeight: 700, color: "var(--text)", fontFamily: "'Syne', sans-serif" }}>
+          <p data-skeleton-lines="1" style={{ margin: 0, fontSize: 22, fontWeight: 700, color: "var(--text)", fontFamily: "'Clash Display', sans-serif" }}>
             {value}
           </p>
         </article>
@@ -238,58 +280,40 @@ const inputStyle: CSSProperties = {
 // ── App ───────────────────────────────────────────────────────────────────────
 
 export function App({
-  loading,
   debug,
   DemoSection
 }: {
-  loading: boolean;
   debug: boolean;
   DemoSection: ComponentType<DemoSectionProps>;
 }) {
-  const opts = { debug };
-
   return (
     <div style={{ display: "grid", gap: 24 }}>
       <DemoSection id="profile-header" title="Profile Header" description="Mixed avatar, text, chips, and action button with container override.">
-        <AutoSkeleton id="demo-profile-header" loading={loading} options={opts}>
-          <ProfileHeader />
-        </AutoSkeleton>
+        <ScrollSkeleton id="demo-profile-header" debug={debug}><ProfileHeader /></ScrollSkeleton>
       </DemoSection>
 
       <DemoSection id="metrics-strip" title="Metrics Strip" description="Dashboard-style stat cards with dense numeric typography.">
-        <AutoSkeleton id="demo-metrics-strip" loading={loading} options={opts}>
-          <MetricsStrip />
-        </AutoSkeleton>
+        <ScrollSkeleton id="demo-metrics-strip" debug={debug}><MetricsStrip /></ScrollSkeleton>
       </DemoSection>
 
       <DemoSection id="default-card" title="Default Card" description="Simple baseline case with automatic shape and line detection.">
-        <AutoSkeleton id="demo-card-default" loading={loading} options={opts}>
-          <DefaultCard />
-        </AutoSkeleton>
+        <ScrollSkeleton id="demo-card-default" debug={debug}><DefaultCard /></ScrollSkeleton>
       </DemoSection>
 
       <DemoSection id="attribute-overrides" title="Attribute Overrides" description="Forcing circles, line counts, and ignored items via skeleton data attributes.">
-        <AutoSkeleton id="demo-card-overrides" loading={loading} options={opts}>
-          <OverrideCard />
-        </AutoSkeleton>
+        <ScrollSkeleton id="demo-card-overrides" debug={debug}><OverrideCard /></ScrollSkeleton>
       </DemoSection>
 
       <DemoSection id="form-panel" title="Form Panel" description="Form labels and controls showing interactive layout skeleton behavior.">
-        <AutoSkeleton id="demo-form-panel" loading={loading} options={opts}>
-          <FormPanel />
-        </AutoSkeleton>
+        <ScrollSkeleton id="demo-form-panel" debug={debug}><FormPanel /></ScrollSkeleton>
       </DemoSection>
 
       <DemoSection id="activity-list" title="Activity List" description="Table-like rows with avatars and per-row text content.">
-        <AutoSkeleton id="demo-activity-table" loading={loading} options={opts}>
-          <ActivityTable />
-        </AutoSkeleton>
+        <ScrollSkeleton id="demo-activity-table" debug={debug}><ActivityTable /></ScrollSkeleton>
       </DemoSection>
 
       <DemoSection id="media-card" title="Media Card" description="Large media block plus headline and multiline body content.">
-        <AutoSkeleton id="demo-media-card" loading={loading} options={opts}>
-          <MediaCard />
-        </AutoSkeleton>
+        <ScrollSkeleton id="demo-media-card" debug={debug}><MediaCard /></ScrollSkeleton>
       </DemoSection>
     </div>
   );
