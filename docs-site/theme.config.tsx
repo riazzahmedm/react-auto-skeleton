@@ -4,10 +4,10 @@ const config: DocsThemeConfig = {
   logo: (
     <span style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
       <span style={{
-        fontFamily: "'Clash Display', sans-serif",
-        fontWeight: 800,
+        fontFamily: "'Inter', ui-sans-serif, sans-serif",
+        fontWeight: 700,
         fontSize: 15,
-        letterSpacing: '-0.02em',
+        letterSpacing: '-0.025em',
       }}>
         auto<span style={{ color: '#a78bfa' }}>-skeleton</span>
       </span>
