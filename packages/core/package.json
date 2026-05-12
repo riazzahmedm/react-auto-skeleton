@@ -11,6 +11,19 @@
       "require": "./dist/index.cjs"
     }
   },
+  "keywords": [
+    "skeleton",
+    "skeleton-loader",
+    "dom-scanner",
+    "loading",
+    "placeholder",
+    "zero-config",
+    "framework-agnostic",
+    "auto-skeleton",
+    "getBoundingClientRect",
+    "ui"
+  ],
+  "description": "Framework-agnostic DOM scanner for auto-skeleton. Measures elements with getBoundingClientRect to generate pixel-accurate skeleton bones.",
   "license": "MIT",
   "files": [
     "dist",

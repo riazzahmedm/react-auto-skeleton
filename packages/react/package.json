@@ -12,6 +12,21 @@
     },
     "./styles.css": "./dist/styles.css"
   },
+  "keywords": [
+    "skeleton",
+    "skeleton-loader",
+    "loading",
+    "placeholder",
+    "shimmer",
+    "react",
+    "react-skeleton",
+    "auto-skeleton",
+    "dom",
+    "zero-config",
+    "ui",
+    "ux"
+  ],
+  "description": "Zero-config skeleton loaders for React. Scans the live DOM at runtime — no manual shapes, no CLI, no config files.",
   "license": "MIT",
   "files": [
     "dist",
