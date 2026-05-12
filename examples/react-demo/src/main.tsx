@@ -238,23 +238,7 @@ function Nav({ dark, onToggle, debug, onToggleDebug }: {
           auto<span style={{ color: "var(--accent)" }}>-skeleton</span>
         </span>
 
-        {/* Section pills */}
-        <nav style={{
-          display: "flex", gap: 4, overflowX: "auto", flex: 1,
-          scrollbarWidth: "none", msOverflowStyle: "none"
-        }}>
-          {sectionLinks.map(([label, href]) => (
-            <a key={href} href={href} style={{
-              fontSize: 12, fontWeight: 500, textDecoration: "none",
-              color: "var(--text-muted)", border: "1px solid var(--border)",
-              borderRadius: 999, padding: "4px 10px", whiteSpace: "nowrap",
-              background: "var(--chip-bg)", transition: "color 0.2s, border-color 0.2s"
-            }}
-              onMouseEnter={e => { (e.target as HTMLElement).style.color = "var(--text)"; (e.target as HTMLElement).style.borderColor = "var(--accent)"; }}
-              onMouseLeave={e => { (e.target as HTMLElement).style.color = "var(--text-muted)"; (e.target as HTMLElement).style.borderColor = "var(--border)"; }}
-            >{label}</a>
-          ))}
-        </nav>
+        <div style={{ flex: 1 }} />
 
         {/* Controls */}
         <div style={{ display: "flex", gap: 8, flexShrink: 0, alignItems: "center" }}>
