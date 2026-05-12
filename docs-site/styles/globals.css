@@ -1,5 +1,6 @@
 /* ── Fonts ───────────────────────────────────────────────────────────────── */
 @import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@600,700,800&display=swap');
 
 /* ── Nextra accent → purple ──────────────────────────────────────────────── */
 :root {
@@ -107,29 +108,34 @@ body {
 /* ── Typography ──────────────────────────────────────────────────────────── */
 article h1 {
   font-family: 'Inter', sans-serif !important;
-  font-size: 1.875rem !important;
-  font-weight: 700 !important;
-  letter-spacing: -0.025em !important;
-  line-height: 1.2 !important;
-  color: #111827 !important;
-  margin-bottom: 1rem !important;
+  font-size: 2.25rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1.15 !important;
+  color: #0f172a !important;
+  margin-bottom: 0.5rem !important;
 }
-.dark article h1 { color: #f1f5f9 !important; }
+.dark article h1 { color: #f8fafc !important; }
 
 article h2 {
   font-family: 'Inter', sans-serif !important;
-  font-size: 1.125rem !important;
+  font-size: 1rem !important;
   font-weight: 600 !important;
-  letter-spacing: -0.015em !important;
-  color: #111827 !important;
-  margin-top: 2.25rem !important;
-  margin-bottom: 0.6rem !important;
+  letter-spacing: -0.01em !important;
+  color: #1e293b !important;
+  margin-top: 2.5rem !important;
+  margin-bottom: 0.75rem !important;
+  padding-bottom: 0.5rem !important;
+  border-bottom: 1px solid #e2e8f0 !important;
 }
-.dark article h2 { color: #e2e8f0 !important; }
+.dark article h2 {
+  color: #e2e8f0 !important;
+  border-bottom-color: rgba(255,255,255,0.08) !important;
+}
 
 article h3 {
   font-family: 'Inter', sans-serif !important;
-  font-size: 0.9375rem !important;
+  font-size: 0.875rem !important;
   font-weight: 600 !important;
   color: #374151 !important;
   margin-top: 1.75rem !important;
@@ -152,13 +158,8 @@ article li {
 }
 .dark article li { color: #94a3b8 !important; }
 
-/* ── Breadcrumb ──────────────────────────────────────────────────────────── */
-.nextra-breadcrumb {
-  font-family: 'Inter', sans-serif !important;
-  font-size: 12px !important;
-  opacity: 0.45 !important;
-  margin-bottom: 6px !important;
-}
+/* ── Breadcrumb — hidden (repeats the page title) ────────────────────────── */
+.nextra-breadcrumb { display: none !important; }
 
 /* ── Inline code ─────────────────────────────────────────────────────────── */
 :not(pre) > code {
