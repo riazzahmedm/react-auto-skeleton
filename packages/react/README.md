@@ -4,7 +4,7 @@
 [![downloads](https://img.shields.io/npm/dm/@auto-skeleton/react?color=blue)](https://www.npmjs.com/package/@auto-skeleton/react)
 [![stars](https://img.shields.io/github/stars/riazzahmedm/react-auto-skeleton?style=flat&color=yellow)](https://github.com/riazzahmedm/react-auto-skeleton/stargazers)
 [![issues](https://img.shields.io/github/issues/riazzahmedm/react-auto-skeleton)](https://github.com/riazzahmedm/react-auto-skeleton/issues)
-[![license](https://img.shields.io/npm/l/@auto-skeleton/react)](https://github.com/riazzahmedm/react-auto-skeleton/blob/main/LICENSE)
+[![license](https://img.shields.io/github/license/riazzahmedm/react-auto-skeleton)](https://github.com/riazzahmedm/react-auto-skeleton/blob/main/LICENSE)
 
 Zero-config skeleton loaders for React. Wraps any component and auto-generates a pixel-accurate skeleton by scanning the real DOM — no manual shape definitions needed.
 
