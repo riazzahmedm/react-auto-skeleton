@@ -1,29 +1,27 @@
-import type { CSSProperties, ReactNode } from "react";
+import type { CSSProperties, ComponentType, ReactNode } from "react";
 import { AutoSkeleton } from "@auto-skeleton/react";
+
+type DemoSectionProps = { id: string; title: string; description: string; children: ReactNode };
+
+// ── Cards ─────────────────────────────────────────────────────────────────────
 
 function DefaultCard() {
   return (
-    <article
-      data-skeleton-container
-      style={{
-        display: "flex",
-        gap: 12,
-        alignItems: "center",
-        padding: 16,
-        border: "1px solid #ddd",
-        borderRadius: 12
-      }}
-    >
+    <article data-skeleton-container style={cardStyle}>
       <img
         src="https://picsum.photos/80"
         alt="avatar"
-        width={80}
-        height={80}
-        style={{ borderRadius: 999 }}
+        width={80} height={80}
+        data-skeleton-shape="circle"
+        style={{ borderRadius: "50%", flexShrink: 0 }}
       />
       <div style={{ flex: 1 }}>
-        <h3 style={{ margin: "0 0 8px" }}>Auto Skeleton Title</h3>
-        <p style={{ margin: 0, color: "#666" }}>Description content for layout capture.</p>
+        <h3 data-skeleton-lines="1" style={{ margin: "0 0 8px", fontSize: 15, fontWeight: 600, color: "var(--text)" }}>
+          Auto Skeleton Title
+        </h3>
+        <p data-skeleton-lines="2" style={{ margin: 0, color: "var(--text-muted)", fontSize: 13, lineHeight: 1.55 }}>
+          Description content for layout capture. This text becomes skeleton bones.
+        </p>
       </div>
     </article>
   );
@@ -33,38 +31,31 @@ function OverrideCard() {
   return (
     <article
       data-skeleton-container
-      style={{
-        display: "grid",
-        gridTemplateColumns: "64px 1fr auto",
-        gap: 12,
-        alignItems: "center",
-        padding: 16,
-        border: "1px solid #ddd",
-        borderRadius: 12
-      }}
+      style={{ ...cardStyle, display: "grid", gridTemplateColumns: "64px 1fr auto" }}
     >
       <img
         src="https://picsum.photos/64"
         alt="profile"
-        width={64}
-        height={64}
+        width={64} height={64}
         data-skeleton-shape="circle"
-        style={{ borderRadius: 999 }}
+        style={{ borderRadius: "50%" }}
       />
       <div>
-        <h4 style={{ margin: "0 0 6px" }} data-skeleton-lines="1">
+        <h4 data-skeleton-lines="1" style={{ margin: "0 0 6px", fontSize: 14, fontWeight: 600, color: "var(--text)" }}>
           Forced Single-line Heading
         </h4>
-        <p style={{ margin: 0, color: "#666" }} data-skeleton-lines="1">
-          This paragraph demonstrates explicit line controls for the generated bones.
+        <p data-skeleton-lines="1" style={{ margin: 0, color: "var(--text-muted)", fontSize: 13 }}>
+          Explicit line count via data attribute.
         </p>
       </div>
       <span
         data-skeleton-ignore
-        style={{ fontSize: 12, color: "#0a7", border: "1px solid #0a7", padding: "3px 8px", borderRadius: 999 }}
-      >
-        LIVE
-      </span>
+        style={{
+          fontSize: 11, fontWeight: 600, color: "var(--teal)",
+          border: "1px solid rgba(6,214,160,0.3)", padding: "3px 10px",
+          borderRadius: 999, height: "fit-content", background: "rgba(6,214,160,0.08)"
+        }}
+      >LIVE</span>
     </article>
   );
 }
@@ -73,40 +64,29 @@ function ProfileHeader() {
   return (
     <header
       data-skeleton-container
-      style={{
-        display: "grid",
-        gridTemplateColumns: "96px 1fr auto",
-        gap: 14,
-        alignItems: "center",
-        padding: 16,
-        border: "1px solid #ddd",
-        borderRadius: 12
-      }}
+      style={{ ...cardStyle, display: "grid", gridTemplateColumns: "80px 1fr auto" }}
     >
       <img
-        src="https://picsum.photos/96"
+        src="https://picsum.photos/80/80?grayscale"
         alt="team avatar"
-        width={96}
-        height={96}
+        width={80} height={80}
         data-skeleton-shape="circle"
-        style={{ borderRadius: 999 }}
+        style={{ borderRadius: "50%" }}
       />
       <div>
-        <h3 style={{ margin: "0 0 6px" }} data-skeleton-lines="1">
+        <h3 data-skeleton-lines="1" style={{ margin: "0 0 5px", fontSize: 16, fontWeight: 700, color: "var(--text)", fontFamily: "'Syne', sans-serif" }}>
           Growth Team
         </h3>
-        <p style={{ margin: "0 0 8px", color: "#666" }} data-skeleton-lines="1">
+        <p data-skeleton-lines="1" style={{ margin: "0 0 10px", color: "var(--text-muted)", fontSize: 13 }}>
           Operational analytics, customer insights, and launch planning.
         </p>
-        <div style={{ display: "flex", flexWrap: "wrap", gap: 8 }}>
-          <span style={chipStyle}>12 members</span>
-          <span style={chipStyle}>4 active projects</span>
-          <span style={chipStyle}>On track</span>
+        <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+          {["12 members", "4 active projects", "On track"].map(t => (
+            <span key={t} style={chipStyle}>{t}</span>
+          ))}
         </div>
       </div>
-      <button type="button" style={buttonStyle}>
-        Invite
-      </button>
+      <button type="button" style={btnStyle}>Invite</button>
     </header>
   );
 }
@@ -115,23 +95,17 @@ function MetricsStrip() {
   return (
     <section
       data-skeleton-container
-      style={{
-        display: "grid",
-        gridTemplateColumns: "repeat(4, minmax(120px, 1fr))",
-        gap: 12
-      }}
+      style={{ display: "grid", gridTemplateColumns: "repeat(4, minmax(100px, 1fr))", gap: 10 }}
     >
-      {[
-        ["Revenue", "$184.2k"],
-        ["Conversion", "4.8%"],
-        ["NPS", "58"],
-        ["Churn", "1.6%"]
-      ].map(([label, value]) => (
-        <article key={label} style={metricCardStyle}>
-          <p style={{ margin: "0 0 8px", color: "#666", fontSize: 13 }} data-skeleton-lines="1">
+      {[["Revenue", "$184.2k"], ["Conversion", "4.8%"], ["NPS", "58"], ["Churn", "1.6%"]].map(([label, value]) => (
+        <article key={label} style={{
+          border: "1px solid var(--border)", borderRadius: 12,
+          padding: "14px 16px", background: "var(--metric-bg)"
+        }}>
+          <p data-skeleton-lines="1" style={{ margin: "0 0 8px", color: "var(--text-muted)", fontSize: 12, fontWeight: 500 }}>
             {label}
           </p>
-          <p style={{ margin: 0, fontSize: 24, fontWeight: 700 }} data-skeleton-lines="1">
+          <p data-skeleton-lines="1" style={{ margin: 0, fontSize: 22, fontWeight: 700, color: "var(--text)", fontFamily: "'Syne', sans-serif" }}>
             {value}
           </p>
         </article>
@@ -142,31 +116,30 @@ function MetricsStrip() {
 
 function FormPanel() {
   return (
-    <section data-skeleton-container style={panelStyle}>
-      <h3 style={{ margin: "0 0 12px" }} data-skeleton-lines="1">
+    <section data-skeleton-container style={{ padding: "16px 18px", border: "1px solid var(--border)", borderRadius: 14, background: "var(--bg-card)" }}>
+      <h3 data-skeleton-lines="1" style={{ margin: "0 0 14px", fontSize: 15, fontWeight: 600, color: "var(--text)" }}>
         Create Campaign
       </h3>
       <div style={{ display: "grid", gap: 10 }}>
-        <label style={labelStyle}>
-          Campaign name
-          <input value="Q3 Launch Sprint" readOnly style={inputStyle} />
-        </label>
-        <label style={labelStyle}>
-          Budget
-          <input value="$35,000" readOnly style={inputStyle} />
-        </label>
-        <label style={labelStyle}>
+        {[
+          ["Campaign name", "Q3 Launch Sprint"],
+          ["Budget", "$35,000"]
+        ].map(([label, val]) => (
+          <label key={label} style={{ display: "grid", gap: 5, fontSize: 12, color: "var(--text-muted)", fontWeight: 500 }}>
+            {label}
+            <input value={val} readOnly style={inputStyle} />
+          </label>
+        ))}
+        <label style={{ display: "grid", gap: 5, fontSize: 12, color: "var(--text-muted)", fontWeight: 500 }}>
           Channel
-          <select value="Paid search" disabled style={inputStyle}>
+          <select disabled style={inputStyle}>
             <option>Paid search</option>
           </select>
         </label>
       </div>
-      <div style={{ display: "flex", gap: 10, marginTop: 14 }}>
-        <button type="button" style={buttonStyle}>
-          Save Draft
-        </button>
-        <button type="button" style={{ ...buttonStyle, background: "#0b0f1a", color: "#fff" }}>
+      <div style={{ display: "flex", gap: 8, marginTop: 14 }}>
+        <button type="button" style={btnStyle}>Save Draft</button>
+        <button type="button" style={{ ...btnStyle, background: "var(--accent)", color: "#fff", border: "none" }}>
           Launch
         </button>
       </div>
@@ -176,45 +149,36 @@ function FormPanel() {
 
 function ActivityTable() {
   return (
-    <section data-skeleton-container style={panelStyle}>
-      <h3 style={{ margin: "0 0 12px" }} data-skeleton-lines="1">
+    <section data-skeleton-container style={{ padding: "16px 18px", border: "1px solid var(--border)", borderRadius: 14, background: "var(--bg-card)" }}>
+      <h3 data-skeleton-lines="1" style={{ margin: "0 0 12px", fontSize: 15, fontWeight: 600, color: "var(--text)" }}>
         Recent Activity
       </h3>
-      <div style={{ display: "grid", gap: 8 }}>
+      <div style={{ display: "grid", gap: 6 }}>
         {[
           ["Olivia Reed", "Approved asset batch", "2m ago"],
           ["Marcus Lee", "Adjusted forecast", "14m ago"],
           ["Nina Patel", "Created audience segment", "1h ago"]
         ].map(([name, action, time]) => (
-          <div
-            key={name}
-            style={{
-              display: "grid",
-              gridTemplateColumns: "40px 1fr auto",
-              alignItems: "center",
-              gap: 10,
-              padding: "10px 12px",
-              borderRadius: 10,
-              background: "#f7f7f8"
-            }}
-          >
+          <div key={name} style={{
+            display: "grid", gridTemplateColumns: "36px 1fr auto",
+            alignItems: "center", gap: 10, padding: "10px 12px",
+            borderRadius: 10, background: "var(--bg-row)"
+          }}>
             <img
-              src={`https://picsum.photos/seed/${encodeURIComponent(name)}/40`}
-              alt={name}
-              width={40}
-              height={40}
+              src={`https://picsum.photos/seed/${encodeURIComponent(name)}/36`}
+              alt={name} width={36} height={36}
               data-skeleton-shape="circle"
-              style={{ borderRadius: 999 }}
+              style={{ borderRadius: "50%" }}
             />
             <div>
-              <p style={{ margin: "0 0 4px" }} data-skeleton-lines="1">
+              <p data-skeleton-lines="1" style={{ margin: "0 0 3px", fontSize: 13, fontWeight: 500, color: "var(--text)" }}>
                 {name}
               </p>
-              <p style={{ margin: 0, color: "#666" }} data-skeleton-lines="1">
+              <p data-skeleton-lines="1" style={{ margin: 0, fontSize: 12, color: "var(--text-muted)" }}>
                 {action}
               </p>
             </div>
-            <span style={{ fontSize: 12, color: "#666" }} data-skeleton-ignore>
+            <span data-skeleton-ignore style={{ fontSize: 11, color: "var(--text-muted)", fontFamily: "'JetBrains Mono', monospace" }}>
               {time}
             </span>
           </div>
@@ -226,27 +190,20 @@ function ActivityTable() {
 
 function MediaCard() {
   return (
-    <article
-      data-skeleton-container
-      style={{
-        border: "1px solid #ddd",
-        borderRadius: 12,
-        overflow: "hidden",
-        background: "#fff"
-      }}
-    >
+    <article data-skeleton-container style={{
+      border: "1px solid var(--border)", borderRadius: 14,
+      overflow: "hidden", background: "var(--bg-card)"
+    }}>
       <img
         src="https://picsum.photos/seed/product/920/280"
-        alt="launch visual"
-        width={920}
-        height={280}
-        style={{ width: "100%", height: 220, objectFit: "cover", display: "block" }}
+        alt="launch visual" width={920} height={280}
+        style={{ width: "100%", height: 200, objectFit: "cover", display: "block" }}
       />
-      <div style={{ padding: 14 }}>
-        <h3 style={{ margin: "0 0 8px" }} data-skeleton-lines="1">
+      <div style={{ padding: "16px 18px" }}>
+        <h3 data-skeleton-lines="1" style={{ margin: "0 0 8px", fontSize: 15, fontWeight: 600, color: "var(--text)" }}>
           Product Spotlight Campaign
         </h3>
-        <p style={{ margin: 0, color: "#666" }} data-skeleton-lines="2">
+        <p data-skeleton-lines="2" style={{ margin: 0, color: "var(--text-muted)", fontSize: 13, lineHeight: 1.55 }}>
           A/B-tested landing page and ad creative set focused on first-time visitors from paid social.
         </p>
       </div>
@@ -254,145 +211,86 @@ function MediaCard() {
   );
 }
 
+// ── Shared styles ─────────────────────────────────────────────────────────────
+
+const cardStyle: CSSProperties = {
+  display: "flex", gap: 14, alignItems: "center", padding: "16px 18px",
+  border: "1px solid var(--border)", borderRadius: 14, background: "var(--bg-card)"
+};
+
 const chipStyle: CSSProperties = {
-  fontSize: 12,
-  border: "1px solid #d4d4d8",
-  borderRadius: 999,
-  padding: "4px 8px",
-  color: "#555"
+  fontSize: 11, fontWeight: 500, border: "1px solid var(--chip-border)",
+  borderRadius: 999, padding: "3px 9px", color: "var(--text-muted)",
+  background: "var(--chip-bg)"
 };
 
-const panelStyle: CSSProperties = {
-  border: "1px solid #ddd",
-  borderRadius: 12,
-  padding: 14,
-  background: "#fff"
-};
-
-const labelStyle: CSSProperties = {
-  display: "grid",
-  gap: 6,
-  color: "#555",
-  fontSize: 13
+const btnStyle: CSSProperties = {
+  padding: "8px 14px", borderRadius: 8, border: "1px solid var(--btn-border)",
+  background: "var(--btn-bg)", color: "var(--text)", cursor: "pointer",
+  fontSize: 13, fontWeight: 500
 };
 
 const inputStyle: CSSProperties = {
-  border: "1px solid #d4d4d8",
-  borderRadius: 8,
-  padding: "9px 10px",
-  background: "#fff",
-  color: "#222"
+  border: "1px solid var(--border)", borderRadius: 8, padding: "8px 10px",
+  background: "var(--input-bg)", color: "var(--text)", fontSize: 13, width: "100%"
 };
 
-const metricCardStyle: CSSProperties = {
-  border: "1px solid #ddd",
-  borderRadius: 12,
-  padding: 14,
-  background: "#fff"
-};
+// ── App ───────────────────────────────────────────────────────────────────────
 
-const buttonStyle: CSSProperties = {
-  padding: "8px 12px",
-  borderRadius: 8,
-  border: "1px solid #ccc",
-  background: "#fff",
-  cursor: "pointer"
-};
-
-function DemoSection({
-  id,
-  title,
-  description,
-  children
+export function App({
+  loading,
+  debug,
+  DemoSection
 }: {
-  id: string;
-  title: string;
-  description: string;
-  children: ReactNode;
+  loading: boolean;
+  debug: boolean;
+  DemoSection: ComponentType<DemoSectionProps>;
 }) {
-  return (
-    <section id={id} style={{ display: "grid", gap: 8, scrollMarginTop: 122 }}>
-      <div>
-        <h2 style={{ margin: "0 0 4px", fontSize: 16 }}>{title}</h2>
-        <p style={{ margin: 0, fontSize: 13, color: "#5f6773" }}>{description}</p>
-      </div>
-      {children}
-    </section>
-  );
-}
+  const opts = { debug };
 
-export function App({ loading, debug }: { loading: boolean; debug: boolean }) {
   return (
-    <section style={{ display: "grid", gap: 16 }}>
-      <DemoSection
-        id="profile-header"
-        title="Profile Header"
-        description="Mixed avatar, text, chips, and action button with container override."
-      >
-        <AutoSkeleton id="demo-profile-header" loading={loading} options={{ debug }}>
+    <div style={{ display: "grid", gap: 24 }}>
+      <DemoSection id="profile-header" title="Profile Header" description="Mixed avatar, text, chips, and action button with container override.">
+        <AutoSkeleton id="demo-profile-header" loading={loading} options={opts}>
           <ProfileHeader />
         </AutoSkeleton>
       </DemoSection>
 
-      <DemoSection
-        id="metrics-strip"
-        title="Metrics Strip"
-        description="Dashboard-style stat cards with dense numeric typography."
-      >
-        <AutoSkeleton id="demo-metrics-strip" loading={loading} options={{ debug }}>
+      <DemoSection id="metrics-strip" title="Metrics Strip" description="Dashboard-style stat cards with dense numeric typography.">
+        <AutoSkeleton id="demo-metrics-strip" loading={loading} options={opts}>
           <MetricsStrip />
         </AutoSkeleton>
       </DemoSection>
 
-      <DemoSection
-        id="default-card"
-        title="Default Card"
-        description="Simple baseline case with automatic shape and line detection."
-      >
-        <AutoSkeleton id="demo-card-default" loading={loading} options={{ debug }}>
+      <DemoSection id="default-card" title="Default Card" description="Simple baseline case with automatic shape and line detection.">
+        <AutoSkeleton id="demo-card-default" loading={loading} options={opts}>
           <DefaultCard />
         </AutoSkeleton>
       </DemoSection>
 
-      <DemoSection
-        id="attribute-overrides"
-        title="Attribute Overrides"
-        description="Forcing circles, line counts, and ignored items via skeleton data attributes."
-      >
-        <AutoSkeleton id="demo-card-overrides" loading={loading} options={{ debug }}>
+      <DemoSection id="attribute-overrides" title="Attribute Overrides" description="Forcing circles, line counts, and ignored items via skeleton data attributes.">
+        <AutoSkeleton id="demo-card-overrides" loading={loading} options={opts}>
           <OverrideCard />
         </AutoSkeleton>
       </DemoSection>
 
-      <DemoSection
-        id="form-panel"
-        title="Form Panel"
-        description="Form labels and controls showing interactive layout skeleton behavior."
-      >
-        <AutoSkeleton id="demo-form-panel" loading={loading} options={{ debug }}>
+      <DemoSection id="form-panel" title="Form Panel" description="Form labels and controls showing interactive layout skeleton behavior.">
+        <AutoSkeleton id="demo-form-panel" loading={loading} options={opts}>
           <FormPanel />
         </AutoSkeleton>
       </DemoSection>
 
-      <DemoSection
-        id="activity-list"
-        title="Activity List"
-        description="Table-like rows with avatars and per-row text content."
-      >
-        <AutoSkeleton id="demo-activity-table" loading={loading} options={{ debug }}>
+      <DemoSection id="activity-list" title="Activity List" description="Table-like rows with avatars and per-row text content.">
+        <AutoSkeleton id="demo-activity-table" loading={loading} options={opts}>
           <ActivityTable />
         </AutoSkeleton>
       </DemoSection>
 
-      <DemoSection
-        id="media-card"
-        title="Media Card"
-        description="Large media block plus headline and multiline body content."
-      >
-        <AutoSkeleton id="demo-media-card" loading={loading} options={{ debug }}>
+      <DemoSection id="media-card" title="Media Card" description="Large media block plus headline and multiline body content.">
+        <AutoSkeleton id="demo-media-card" loading={loading} options={opts}>
           <MediaCard />
         </AutoSkeleton>
       </DemoSection>
-    </section>
+    </div>
   );
 }
