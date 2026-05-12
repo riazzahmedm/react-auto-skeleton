@@ -255,6 +255,19 @@ article table td {
 .dark .nextra-toc ul li a { color: #64748b !important; }
 .dark .nextra-toc ul li a:hover { color: #a78bfa !important; }
 
+/* ── TOC active link ─────────────────────────────────────────────────────── */
+.nextra-toc ul li a[aria-selected="true"],
+.nextra-toc ul li a.nx-font-medium,
+.nextra-toc ul li a.nx-text-primary-600 {
+  color: #7c3aed !important;
+  font-weight: 500 !important;
+}
+.dark .nextra-toc ul li a[aria-selected="true"],
+.dark .nextra-toc ul li a.nx-font-medium,
+.dark .nextra-toc ul li a.nx-text-primary-600 {
+  color: #a78bfa !important;
+}
+
 /* ── Callout ─────────────────────────────────────────────────────────────── */
 .nextra-callout {
   border-radius: 8px !important;
