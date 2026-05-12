@@ -8,7 +8,7 @@
 [![issues](https://img.shields.io/github/issues/riazzahmedm/react-auto-skeleton)](https://github.com/riazzahmedm/react-auto-skeleton/issues)
 [![license](https://img.shields.io/github/license/riazzahmedm/react-auto-skeleton)](https://github.com/riazzahmedm/react-auto-skeleton/blob/main/LICENSE)
 
-Zero-config skeleton loaders for React. Wraps any component and auto-generates a pixel-accurate skeleton by scanning the real DOM — no manual shape definitions needed.
+Zero-config skeleton loaders for React. Wrap any component — auto-skeleton scans the live DOM at runtime and generates a pixel-accurate skeleton. No CLI, no build step, no JSON files to maintain.
 
 **[Live demo →](https://riazzahmedm.github.io/react-auto-skeleton/)**
 
@@ -18,7 +18,23 @@ Zero-config skeleton loaders for React. Wraps any component and auto-generates a
 </AutoSkeleton>
 ```
 
-When `loading` is true, the real UI is replaced with a skeleton that mirrors its exact layout.
+That's it. No shape definitions, no extra config.
+
+---
+
+## Why auto-skeleton
+
+Most skeleton libraries make you define shapes manually — rectangles, circles, line counts — by hand. Others require a CLI build step to snapshot your UI into a static file you have to keep in sync.
+
+auto-skeleton does neither. It measures your real rendered DOM with `getBoundingClientRect` at runtime, so skeletons are always accurate and always up to date — even as your layout changes.
+
+| | auto-skeleton | Manual shapes | CLI snapshot tools |
+|---|:---:|:---:|:---:|
+| Zero config | ✅ | ❌ | ✅ |
+| No build step | ✅ | ✅ | ❌ |
+| Always in sync with layout | ✅ | ❌ | ❌ |
+| Adapts to dynamic content | ✅ | ❌ | ❌ |
+| Cached for instant re-loads | ✅ | — | ✅ |
 
 ---
 
