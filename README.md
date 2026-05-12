@@ -1,16 +1,13 @@
 # auto-skeleton
 
-![auto-skeleton demo](.github/demo.gif)
-
 [![npm](https://img.shields.io/npm/v/@auto-skeleton/react?label=npm&color=cb3837)](https://www.npmjs.com/package/@auto-skeleton/react)
 [![downloads](https://img.shields.io/npm/dm/@auto-skeleton/react?color=blue)](https://www.npmjs.com/package/@auto-skeleton/react)
 [![stars](https://img.shields.io/github/stars/riazzahmedm/react-auto-skeleton?style=flat&color=yellow)](https://github.com/riazzahmedm/react-auto-skeleton/stargazers)
-[![issues](https://img.shields.io/github/issues/riazzahmedm/react-auto-skeleton)](https://github.com/riazzahmedm/react-auto-skeleton/issues)
 [![license](https://img.shields.io/github/license/riazzahmedm/react-auto-skeleton)](https://github.com/riazzahmedm/react-auto-skeleton/blob/main/LICENSE)
 
-Zero-config skeleton loaders for React. Wrap any component — auto-skeleton scans the live DOM at runtime and generates a pixel-accurate skeleton. No CLI, no build step, no JSON files to maintain.
+Zero-config skeleton loaders for React. Wrap any component — auto-skeleton scans the live DOM at runtime and generates a pixel-accurate skeleton. No CLI, no build step, no config files to maintain.
 
-**[Live demo →](https://riazzahmedm.github.io/react-auto-skeleton/)**
+**[Live demo →](https://riazzahmedm.github.io/react-auto-skeleton/)** · **[Docs →](https://riazzahmedm.github.io/react-auto-skeleton/docs/getting-started/)**
 
 ```tsx
 <AutoSkeleton id="profile" loading={isLoading}>
@@ -76,7 +73,7 @@ function UserProfile({ userId }: { userId: string }) {
 }
 ```
 
-On first load, `auto-skeleton` scans the rendered DOM, extracts bone positions, and caches them. Every subsequent load shows the skeleton immediately — no layout shift.
+On first load, auto-skeleton scans the rendered DOM, extracts bone positions, and caches them. Every subsequent load shows the skeleton immediately — no layout shift.
 
 ---
 
@@ -151,6 +148,27 @@ Override CSS variables to match your design system:
   --as-base: #e4e4e7;          /* bone background */
   --as-highlight: rgba(255, 255, 255, 0.9);  /* wave shimmer */
 }
+
+.dark {
+  --as-base: #27272a;
+  --as-highlight: rgba(255, 255, 255, 0.05);
+}
+```
+
+---
+
+## Next.js
+
+Add `"use client"` to any component that renders `<AutoSkeleton>`, and import styles in your root layout:
+
+```tsx
+// app/layout.tsx
+import "@auto-skeleton/react/styles.css";
+```
+
+```tsx
+"use client";
+import { AutoSkeleton } from "@auto-skeleton/react";
 ```
 
 ---
@@ -164,7 +182,7 @@ Override CSS variables to match your design system:
 
 ## Debug mode
 
-Set `options.debug = true` to visualize detected bones with dashed red outlines while tuning your layout:
+Set `options.debug = true` to visualize detected bones with dashed outlines while tuning your layout:
 
 ```tsx
 <AutoSkeleton id="card" loading={loading} options={{ debug: true }}>
@@ -194,7 +212,7 @@ const bones = scanBones(document.getElementById("root"), {
 
 Latest 2 versions of Chrome, Edge, Firefox, and Safari (macOS + iOS).
 
-Requires `MutationObserver`, `ResizeObserver`, and `sessionStorage`. Falls back to `window resize` events if `ResizeObserver` is unavailable.
+Requires `MutationObserver`, `ResizeObserver`, and `sessionStorage`.
 
 ---
 
@@ -207,13 +225,4 @@ npm install
 npm run demo:dev     # start the demo
 npm test             # run tests
 npm run build        # build all packages
-npm run perf:scan    # run performance benchmark (budget: <80ms avg)
-```
-
-To release:
-
-```bash
-npm run changeset          # describe your changes
-npm run version-packages   # bump versions + generate changelogs
-npm run release            # publish to npm
 ```
