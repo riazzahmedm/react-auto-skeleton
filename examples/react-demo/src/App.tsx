@@ -10,7 +10,7 @@ const CONTENT_MS  = 2000;
 function ScrollSkeleton({ id, children, debug }: { id: string; children: ReactNode; debug: boolean }) {
   const [loading, setLoading] = useState(false);
   const ref      = useRef<HTMLDivElement>(null);
-  const loopRef  = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const loopRef  = useRef<number | null>(null);
   const active   = useRef(false);
 
   const startLoop = () => {
