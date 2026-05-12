@@ -4,26 +4,45 @@ import { AutoSkeleton } from "@auto-skeleton/react";
 
 // ── Scroll-triggered skeleton ─────────────────────────────────────────────────
 
+const SKELETON_MS = 1400;
+const CONTENT_MS  = 2000;
+
 function ScrollSkeleton({ id, children, debug }: { id: string; children: ReactNode; debug: boolean }) {
   const [loading, setLoading] = useState(false);
-  const ref = useRef<HTMLDivElement>(null);
-  const revealed = useRef(false);
+  const ref      = useRef<HTMLDivElement>(null);
+  const loopRef  = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const active   = useRef(false);
+
+  const startLoop = () => {
+    if (active.current) return;
+    active.current = true;
+
+    const tick = (showSkeleton: boolean) => {
+      setLoading(showSkeleton);
+      loopRef.current = window.setTimeout(
+        () => tick(!showSkeleton),
+        showSkeleton ? SKELETON_MS : CONTENT_MS
+      );
+    };
+    tick(true);
+  };
+
+  const stopLoop = () => {
+    active.current = false;
+    if (loopRef.current) window.clearTimeout(loopRef.current);
+    setLoading(false);
+  };
 
   useEffect(() => {
     if (!ref.current) return;
     const el = ref.current;
 
-    // Brief content render so scanner can measure bones, then flip to loading
+    // Let content render first so the scanner can measure bones
     const scanTimer = window.setTimeout(() => {
-      setLoading(true);
-
       const observer = new IntersectionObserver(
         ([entry]) => {
-          if (entry.isIntersecting && !revealed.current) {
-            revealed.current = true;
-            observer.disconnect();
-            window.setTimeout(() => setLoading(false), 1300);
-          }
+          if (entry.isIntersecting) startLoop();
+          else stopLoop();
         },
         { threshold: 0.2, rootMargin: "0px 0px -60px 0px" }
       );
@@ -31,7 +50,10 @@ function ScrollSkeleton({ id, children, debug }: { id: string; children: ReactNo
       return () => observer.disconnect();
     }, 250);
 
-    return () => window.clearTimeout(scanTimer);
+    return () => {
+      window.clearTimeout(scanTimer);
+      stopLoop();
+    };
   }, []);
 
   return (
