@@ -1,0 +1,22 @@
+{
+  "name": "vue-demo",
+  "private": true,
+  "version": "0.0.1",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vue-tsc -p tsconfig.json --noEmit && vite build",
+    "typecheck": "vue-tsc -p tsconfig.json --noEmit"
+  },
+  "dependencies": {
+    "@auto-skeleton/vue": "*",
+    "vue": "^3.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.2",
+    "@vitejs/plugin-vue": "^5.0.0",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.8",
+    "vue-tsc": "^2.0.0"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "jsx": "preserve",
+    "moduleResolution": "Bundler",
+    "lib": ["ES2020", "DOM"]
+  },
+  "include": ["src", "env.d.ts", "vite.config.ts"]
+}
