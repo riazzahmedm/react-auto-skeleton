@@ -1,0 +1,44 @@
+{
+  "name": "@auto-skeleton/lit",
+  "version": "0.0.5",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    }
+  },
+  "keywords": [
+    "skeleton",
+    "skeleton-loader",
+    "loading",
+    "placeholder",
+    "shimmer",
+    "lit",
+    "web-components",
+    "auto-skeleton",
+    "dom",
+    "zero-config",
+    "ui",
+    "ux"
+  ],
+  "description": "Zero-config skeleton loaders for Lit and Web Components. Scans the live DOM at runtime — no manual shapes, no CLI, no config files.",
+  "license": "MIT",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "typecheck": "tsc -p tsconfig.json --noEmit"
+  },
+  "peerDependencies": {
+    "lit": ">=3"
+  },
+  "dependencies": {
+    "@auto-skeleton/core": "0.0.5"
+  }
+}

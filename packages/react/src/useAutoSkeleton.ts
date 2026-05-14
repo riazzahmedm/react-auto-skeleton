@@ -17,6 +17,13 @@ export function useAutoSkeleton({
   const [bones, setBones] = useState<Bone[] | null>(() => (cacheEnabled ? getCachedBones(id) : null));
   const scanTimerRef = useRef<number | null>(null);
 
+  // Synchronize state from props immediately during render to avoid "flash" of old bones
+  const [prevId, setPrevId] = useState(id);
+  if (id !== prevId) {
+    setPrevId(id);
+    setBones(cacheEnabled ? getCachedBones(id) : null);
+  }
+
   const runScan = useCallback(() => {
     if (!rootRef.current) return;
     const next = scanBones(rootRef.current, {
