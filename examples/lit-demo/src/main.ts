@@ -264,6 +264,7 @@ export class DemoApp extends LitElement {
         <main><div class="notif-list" data-skeleton-container>${Array(5).fill(0).map((_, i) => html`<div class="notif-item"><div class="notif-dot"></div><user-avatar name="U${i}" size="32px"></user-avatar><div>New alert ${i}</div></div>`)}</div></main>
       `;
     }
+    return html`<main></main>`;
   }
 
   render() {
