@@ -40,6 +40,7 @@ auto-skeleton does neither. It measures your real rendered DOM with `getBounding
 | Package | Description |
 |---|---|
 | [`@auto-skeleton/react`](https://www.npmjs.com/package/@auto-skeleton/react) | React component and hook |
+| [`@auto-skeleton/lit`](https://www.npmjs.com/package/@auto-skeleton/lit) | Lit / Web Component |
 | [`@auto-skeleton/core`](https://www.npmjs.com/package/@auto-skeleton/core) | Framework-agnostic DOM scanner |
 
 ---
@@ -52,7 +53,7 @@ npm install @auto-skeleton/react
 
 ---
 
-## Quick start
+## Quick start (React)
 
 ```tsx
 import { AutoSkeleton } from "@auto-skeleton/react";
@@ -71,6 +72,23 @@ function UserProfile({ userId }: { userId: string }) {
     </AutoSkeleton>
   );
 }
+```
+
+## Quick start (Lit / Web Components)
+
+```typescript
+import "@auto-skeleton/lit";
+
+// In your Lit template
+html`
+  <auto-skeleton id="profile" ?loading=${isLoading}>
+    <div class="profile">
+      <img src=${avatar} />
+      <h2>${name}</h2>
+      <p>${bio}</p>
+    </div>
+  </auto-skeleton>
+`
 ```
 
 On first load, auto-skeleton scans the rendered DOM, extracts bone positions, and caches them. Every subsequent load shows the skeleton immediately — no layout shift.
