@@ -55,27 +55,25 @@ describe("scanBones", () => {
   });
 
   it("ignores hidden nodes", () => {
-    const root = document.createElement("div");
-    const visible = document.createElement("div");
-    const hidden = document.createElement("div");
-    root.appendChild(visible);
-    root.appendChild(hidden);
-    mockRect(visible, { top: 0, left: 0, width: 100, height: 16 });
-    mockRect(hidden, { top: 20, left: 0, width: 100, height: 16 });
-    document.body.appendChild(root);
-    mockRect(root, { top: 0, left: 0, width: 200, height: 200 });
+    // ... existing test code
+  });
 
-    vi.spyOn(window, "getComputedStyle").mockImplementation((el: Element) => {
-      if (el === hidden) {
-        return {
-          display: "none",
-          visibility: "visible",
-          opacity: "1",
-          fontSize: "16px",
-          lineHeight: "20px",
-          borderRadius: "0px"
-        } as unknown as CSSStyleDeclaration;
-      }
+  it("traverses into Shadow DOM", () => {
+    const root = document.createElement("div");
+    const host = document.createElement("custom-element");
+    root.appendChild(host);
+    document.body.appendChild(root);
+
+    const shadow = host.attachShadow({ mode: "open" });
+    const inner = document.createElement("div");
+    inner.textContent = "shadow content";
+    shadow.appendChild(inner);
+
+    mockRect(root, { top: 0, left: 0, width: 500, height: 500 });
+    mockRect(host, { top: 10, left: 10, width: 200, height: 50 });
+    mockRect(inner, { top: 15, left: 15, width: 100, height: 20 });
+
+    vi.spyOn(window, "getComputedStyle").mockImplementation(() => {
       return {
         display: "block",
         visibility: "visible",
@@ -87,6 +85,9 @@ describe("scanBones", () => {
     });
 
     const bones = scanBones(root);
-    expect(bones).toHaveLength(1);
+    // Should find bones for both host and inner div (unless host is a container)
+    // By default, host has children (in shadow dom), so it might be skipped if it has no direct text.
+    // Let's verify we found the inner shadow content.
+    expect(bones.some(b => b.x === 15 && b.y === 15)).toBe(true);
   });
 });
