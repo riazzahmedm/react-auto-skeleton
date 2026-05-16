@@ -54,7 +54,7 @@ export function useAutoSkeleton(
       characterData: true,
       attributes: true,
     });
-    window.addEventListener("resize", schedule);
+    // Window resize is the fallback — only used when ResizeObserver is unavailable
   }
 
   function teardownWatchers() {

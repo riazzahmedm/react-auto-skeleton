@@ -1,6 +1,7 @@
 {
   "name": "@auto-skeleton/vue",
-  "version": "0.0.1",
+  "version": "0.0.5",
+  "description": "Zero-config skeleton loaders for Vue 3. Scans the live DOM at runtime — no manual shapes, no CLI, no config files.",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -12,6 +13,20 @@
     },
     "./styles.css": "./dist/styles.css"
   },
+  "keywords": [
+    "skeleton",
+    "skeleton-loader",
+    "loading",
+    "placeholder",
+    "shimmer",
+    "vue",
+    "vue3",
+    "auto-skeleton",
+    "dom",
+    "zero-config",
+    "ui",
+    "ux"
+  ],
   "license": "MIT",
   "files": [
     "dist",
@@ -21,7 +36,7 @@
     "**/*.css"
   ],
   "scripts": {
-    "build": "vite build && node -e \"require('fs').copyFileSync('src/styles.css','dist/styles.css')\"",
+    "build": "vite build && node scripts/copy-styles.mjs",
     "typecheck": "vue-tsc -p tsconfig.json --noEmit"
   },
   "peerDependencies": {
