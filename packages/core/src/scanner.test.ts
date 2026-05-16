@@ -1,8 +1,8 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi, afterEach } from "vitest";
 import { scanBones } from "./scanner";
 
 function mockRect(el: Element, rect: Partial<DOMRect>): void {
-  vi.spyOn(el, "getBoundingClientRect").mockReturnValue({
+  const value = () => ({
     x: rect.left ?? 0,
     y: rect.top ?? 0,
     top: rect.top ?? 0,
@@ -13,9 +13,15 @@ function mockRect(el: Element, rect: Partial<DOMRect>): void {
     height: rect.height ?? 0,
     toJSON: () => ({})
   } as DOMRect);
+  // Use Object.defineProperty so the mock survives shadow DOM boundary moves in jsdom
+  Object.defineProperty(el, "getBoundingClientRect", { value, configurable: true, writable: true });
 }
 
 describe("scanBones", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it("creates text bones using explicit line count", () => {
     const root = document.createElement("div");
     const p = document.createElement("p");
@@ -64,30 +70,25 @@ describe("scanBones", () => {
     root.appendChild(host);
     document.body.appendChild(root);
 
+    vi.stubGlobal("getComputedStyle", () => ({
+      display: "block", visibility: "visible", opacity: "1",
+      fontSize: "16px", lineHeight: "20px", borderRadius: "0px",
+      borderLeftWidth: "0px", borderTopWidth: "0px"
+    }));
+
     const shadow = host.attachShadow({ mode: "open" });
     const inner = document.createElement("div");
     inner.textContent = "shadow content";
+
+    // Mock rect BEFORE appending to shadow — spies don't reliably survive shadowRoot.appendChild in jsdom
+    mockRect(inner, { top: 15, left: 15, width: 100, height: 20 });
     shadow.appendChild(inner);
 
     mockRect(root, { top: 0, left: 0, width: 500, height: 500 });
     mockRect(host, { top: 10, left: 10, width: 200, height: 50 });
-    mockRect(inner, { top: 15, left: 15, width: 100, height: 20 });
-
-    vi.spyOn(window, "getComputedStyle").mockImplementation(() => {
-      return {
-        display: "block",
-        visibility: "visible",
-        opacity: "1",
-        fontSize: "16px",
-        lineHeight: "20px",
-        borderRadius: "0px"
-      } as unknown as CSSStyleDeclaration;
-    });
 
     const bones = scanBones(root);
-    // Should find bones for both host and inner div (unless host is a container)
-    // By default, host has children (in shadow dom), so it might be skipped if it has no direct text.
-    // Let's verify we found the inner shadow content.
+    // Should traverse into shadow DOM and find the inner text div
     expect(bones.some(b => b.x === 15 && b.y === 15)).toBe(true);
   });
 });

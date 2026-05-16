@@ -6,7 +6,8 @@ import type { AutoSkeletonOptions } from "./types";
 
 @customElement("auto-skeleton")
 export class AutoSkeleton extends LitElement {
-  @property({ type: String }) id = "";
+  /** Unique cache key — distinct from the native HTML `id` attribute. */
+  @property({ type: String, attribute: "skeleton-id" }) skeletonId = "";
   @property({ type: Boolean }) loading = false;
   @property({ type: Object }) options: AutoSkeletonOptions = {};
 
@@ -93,7 +94,7 @@ export class AutoSkeleton extends LitElement {
   connectedCallback() {
     super.connectedCallback();
     if (this.cacheEnabled) {
-      this.bones = getCachedBones(this.id);
+      this.bones = getCachedBones(this.skeletonId);
     }
     this.setupWatchers();
   }
@@ -104,16 +105,16 @@ export class AutoSkeleton extends LitElement {
   }
 
   willUpdate(changedProperties: PropertyValues<this>) {
-    const idChanged = changedProperties.has("id");
+    const idChanged = changedProperties.has("skeletonId");
     const optionsChanged = changedProperties.has("options");
     const loadingChanged = changedProperties.has("loading");
 
-    if (idChanged || (optionsChanged && !this.cacheEnabled)) {
+    if (idChanged || optionsChanged) {
       if (this.cacheEnabled) {
-        this.bones = getCachedBones(this.id);
+        this.bones = getCachedBones(this.skeletonId);
       } else {
         this.bones = null;
-        clearCachedBones(this.id);
+        clearCachedBones(this.skeletonId);
       }
     }
 
@@ -133,7 +134,7 @@ export class AutoSkeleton extends LitElement {
 
     if (
       changedProperties.has("loading") ||
-      changedProperties.has("id") ||
+      changedProperties.has("skeletonId") ||
       changedProperties.has("options")
     ) {
       this.updateHostClass();
@@ -153,12 +154,31 @@ export class AutoSkeleton extends LitElement {
   }
 
   private runScan() {
-    const next = scanBones(this, {
-      ignoreSelectors: this.options.ignoreSelectors,
-      minSize: this.options.minSize
-    });
+    // Scan the light DOM children (slotted content) rather than `this` (the
+    // shadow host), so the scanner can reach actual content across the shadow
+    // boundary. We wrap children in a temporary fragment clone rooted at `this`
+    // for offset calculations, or fall back to scanning each child individually.
+    const slot = this.shadowRoot?.querySelector("slot") as HTMLSlotElement | null;
+    const assigned = slot ? slot.assignedElements({ flatten: true }) : Array.from(this.children);
+
+    let next: ReturnType<typeof scanBones>;
+    if (assigned.length === 0) {
+      // Nothing slotted yet — fall back to scanning host element
+      next = scanBones(this, {
+        ignoreSelectors: this.options.ignoreSelectors,
+        minSize: this.options.minSize
+      });
+    } else {
+      // Scan each slotted element and merge results
+      const opts = {
+        ignoreSelectors: this.options.ignoreSelectors,
+        minSize: this.options.minSize
+      };
+      next = assigned.flatMap(el => scanBones(el as HTMLElement, opts));
+    }
+
     this.bones = next;
-    setCachedBones(this.id, next, this.cacheEnabled);
+    setCachedBones(this.skeletonId, next, this.cacheEnabled);
     this.updateHostClass();
   }
 
@@ -179,8 +199,12 @@ export class AutoSkeleton extends LitElement {
     if (typeof ResizeObserver !== "undefined") {
       this.resizeObserver = new ResizeObserver(() => schedule());
       this.resizeObserver.observe(this);
+    } else {
+      // Fallback: listen to window resize when ResizeObserver is unavailable
+      window.addEventListener("resize", schedule);
+      this._windowResizeHandler = schedule;
     }
-    
+
     this.mutationObserver = new MutationObserver(() => schedule());
     this.mutationObserver.observe(this, {
       childList: true,
@@ -188,9 +212,6 @@ export class AutoSkeleton extends LitElement {
       characterData: true,
       attributes: true
     });
-
-    window.addEventListener("resize", schedule);
-    this._windowResizeHandler = schedule;
   }
 
   private _windowResizeHandler: (() => void) | null = null;
