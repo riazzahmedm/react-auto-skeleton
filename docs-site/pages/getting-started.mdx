@@ -1,6 +1,19 @@
 # Getting Started
 
-## Installation
+## Choose your package
+
+| Package | Framework | Custom element |
+|---|---|---|
+| `@auto-skeleton/react` | React 18+ | No — uses a React component |
+| `@auto-skeleton/lit` | Lit, Vue, Svelte, vanilla JS | Yes — `<auto-skeleton>` web component |
+
+Both packages use the same `@auto-skeleton/core` scanner under the hood and support the same [data attributes](/data-attributes), [theming](/theming), and [options](/api-reference).
+
+---
+
+## React
+
+### Installation
 
 ```bash
 npm install @auto-skeleton/react
@@ -47,4 +60,44 @@ import { Callout } from 'nextra/components'
 
 <Callout type="info">
   The `id` prop must be unique per `<AutoSkeleton>` instance on the page. It is used as the cache key.
+</Callout>
+
+---
+
+## Lit & Web Components
+
+### Installation
+
+```bash
+npm install @auto-skeleton/lit lit
+```
+
+No stylesheet import needed — styles are encapsulated inside the element's shadow root.
+
+### Quick start
+
+```ts
+import '@auto-skeleton/lit';
+```
+
+```html
+<auto-skeleton skeleton-id="user-card" loading>
+  <user-card-component></user-card-component>
+</auto-skeleton>
+```
+
+Inside a Lit component, use property binding:
+
+```ts
+html`
+  <auto-skeleton skeleton-id="feed" .loading=${this.isLoading}>
+    <feed-list></feed-list>
+  </auto-skeleton>
+`
+```
+
+The scanner traverses Shadow DOM boundaries automatically — nested Lit components are discovered without any extra configuration.
+
+<Callout type="info">
+  See the [Lit & Web Components](/lit) page for the full guide, including Shadow DOM traversal details, options, and TypeScript types.
 </Callout>

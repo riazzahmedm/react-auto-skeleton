@@ -4,9 +4,12 @@
     "baseUrl": ".",
     "paths": {
       "@auto-skeleton/core": ["../../packages/core/src/index.ts"],
-      "@auto-skeleton/react": ["../../packages/react/src/index.ts"]
+      "@auto-skeleton/react": ["../../packages/react/src/index.ts"],
+      "@auto-skeleton/lit": ["../../packages/lit/src/index.ts"]
     },
-    "types": ["vite/client", "node"]
+    "types": ["vite/client", "node"],
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false
   },
   "include": ["src", "vite.config.ts"]
 }

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { AutoSkeleton } from "@auto-skeleton/react";
 import { App } from "./App";
+import "./LitDemo"; // registers as-demo-* custom elements + auto-skeleton web component
 
 // ── Theme variables ──────────────────────────────────────────────────────────
 
@@ -598,6 +599,97 @@ function DemoSection({ id, title, description, children }: {
   );
 }
 
+// ── Lit Demo ────────────────────────────────────────────────────────────────
+// The <auto-skeleton> web component and Lit custom elements are registered by
+// importing ./LitDemo.ts. React treats them as opaque custom elements.
+// We use a ref to set the `.loading` JS property since React 18 doesn't
+// forward boolean props to custom elements as properties automatically.
+
+function LitDemo({ debug }: { debug: boolean }) {
+  const [loading, setLoading] = useState(false);
+  const skeletonRef = useRef<HTMLElement>(null);
+
+  // Sync the .loading property imperatively — custom element needs a JS boolean
+  useEffect(() => {
+    const el = skeletonRef.current as any;
+    if (el) {
+      el.loading = loading;
+      el.options = {
+        animation: "wave",
+        cache: false,
+        debug,
+      };
+    }
+  }, [loading, debug]);
+
+  const trigger = () => {
+    setLoading(true);
+    setTimeout(() => setLoading(false), 2200);
+  };
+
+  return (
+    <div style={{ display: "grid", gap: 16 }}>
+      {/* Web component demo */}
+      {/* @ts-expect-error — custom element, not in JSX intrinsic elements */}
+      <auto-skeleton ref={skeletonRef} skeleton-id="lit-team-grid">
+        {/* @ts-expect-error */}
+        <as-demo-team-grid></as-demo-team-grid>
+        {/* @ts-expect-error */}
+      </auto-skeleton>
+
+      {/* Controls row */}
+      <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+        <button
+          type="button"
+          onClick={trigger}
+          disabled={loading}
+          style={{
+            fontSize: 12, fontWeight: 500, padding: "7px 16px",
+            borderRadius: 7, border: "1px solid var(--border)",
+            background: loading ? "rgba(124,58,237,0.2)" : "var(--btn-bg)",
+            color: loading ? "var(--accent-light)" : "var(--text-muted)",
+            cursor: loading ? "not-allowed" : "pointer",
+            transition: "all 0.15s"
+          }}
+        >{loading ? "Scanning…" : "▶ Preview skeleton"}</button>
+
+        <span style={{ fontSize: 11, color: "var(--text-muted)", lineHeight: 1.5 }}>
+          4 nested Lit components · shadow DOM traversed automatically
+        </span>
+      </div>
+
+      {/* Code snippet */}
+      <div style={{
+        background: "var(--code-bg)", border: "1px solid var(--border)",
+        borderRadius: 10, overflow: "hidden"
+      }}>
+        <div style={{
+          display: "flex", alignItems: "center", gap: 6, padding: "8px 14px",
+          borderBottom: "1px solid var(--border)"
+        }}>
+          {["#ff5f57","#ffbd2e","#28c941"].map(c => (
+            <span key={c} style={{ width: 7, height: 7, borderRadius: "50%", background: c, opacity: 0.7 }} />
+          ))}
+          <span style={{ fontSize: 10, color: "var(--text-muted)", marginLeft: 6, fontFamily: "'JetBrains Mono', monospace" }}>
+            my-app.ts
+          </span>
+        </div>
+        <pre style={{
+          margin: 0, padding: "16px 18px",
+          fontFamily: "'JetBrains Mono', monospace", fontSize: 11.5,
+          lineHeight: 1.7, color: "var(--text)", overflowX: "auto"
+        }}>{`import '@auto-skeleton/lit';
+
+html\`
+  <auto-skeleton skeleton-id="team" .loading=\${this.loading}>
+    <team-grid></team-grid>  <!-- shadow DOM traversed ✓ -->
+  </auto-skeleton>
+\``}</pre>
+      </div>
+    </div>
+  );
+}
+
 // ── Root ─────────────────────────────────────────────────────────────────────
 
 function DemoRoot() {
@@ -643,6 +735,26 @@ function DemoRoot() {
           <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
         </div>
         <App debug={debug} DemoSection={DemoSection} />
+
+        {/* Lit / Web Components divider */}
+        <div style={{
+          fontSize: 11, fontWeight: 600, letterSpacing: "0.1em",
+          color: "var(--teal)", textTransform: "uppercase",
+          fontFamily: "'JetBrains Mono', monospace",
+          margin: "64px 0 40px", display: "flex", alignItems: "center", gap: 12
+        }}>
+          <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+          Lit &amp; Web Components
+          <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+        </div>
+
+        <DemoSection
+          id="lit"
+          title="@auto-skeleton/lit"
+          description="Native custom element — works with Lit, Vue, Svelte, or plain HTML. Shadow DOM traversed automatically."
+        >
+          <LitDemo debug={debug} />
+        </DemoSection>
       </main>
 
       {showTop && (
