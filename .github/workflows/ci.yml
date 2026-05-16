@@ -25,6 +25,9 @@ jobs:
       - name: Build core
         run: npm run --workspace @auto-skeleton/core build
 
+      - name: Build vue
+        run: npm run --workspace @auto-skeleton/vue build
+
       - name: Typecheck
         run: npm run typecheck
 

@@ -6,6 +6,7 @@ dist/
 .DS_Store
 *.js.map
 coverage/
+*.log
 
 # Compiled artifacts in src (tsc side-effects)
 packages/*/src/*.js
