@@ -1,0 +1,261 @@
+# Lit & Web Components
+
+`@auto-skeleton/lit` brings zero-config skeleton loaders to Lit and any web-components-based UI. It ships as a native custom element — `<auto-skeleton>` — that traverses **Shadow DOM boundaries** automatically, so deeply nested Lit components are scanned without any extra wiring.
+
+## Installation
+
+```bash
+npm install @auto-skeleton/lit lit
+```
+
+No stylesheet import needed — animations and bone styles are encapsulated inside the element's own Shadow DOM.
+
+## Quick start
+
+Wrap any content with `<auto-skeleton>` and bind the `loading` property:
+
+```ts
+import '@auto-skeleton/lit';
+
+// Vanilla JS / HTML
+document.querySelector('auto-skeleton').loading = true;
+```
+
+```html
+<auto-skeleton skeleton-id="profile" loading>
+  <user-profile-card></user-profile-card>
+</auto-skeleton>
+```
+
+Inside a Lit component, use property binding (`.loading`) so Lit handles the boolean:
+
+```ts
+import { LitElement, html } from 'lit';
+import { customElement, state } from 'lit/decorators.js';
+import '@auto-skeleton/lit';
+
+@customElement('my-app')
+class MyApp extends LitElement {
+  @state() private isLoading = true;
+
+  render() {
+    return html`
+      <auto-skeleton skeleton-id="user-card" .loading=${this.isLoading}>
+        <user-card></user-card>
+      </auto-skeleton>
+    `;
+  }
+}
+```
+
+import { Callout } from 'nextra/components'
+
+<Callout type="info">
+  Use `.loading` (Lit property binding with a dot prefix) rather than the `loading` attribute to correctly pass a JavaScript boolean. The attribute form (`loading=""`) also works but treat it as a toggle — presence means true, absence means false.
+</Callout>
+
+## Shadow DOM traversal
+
+This is what sets `@auto-skeleton/lit` apart. The scanner traverses **both light DOM and Shadow DOM** recursively, so it finds bones inside nested custom elements without any configuration.
+
+Given this component tree:
+
+```
+<auto-skeleton skeleton-id="feed">
+  <feed-list>                          ← shadow root
+    <feed-post>                        ← shadow root
+      <div class="author">...</div>    ← bone detected ✓
+      <img data-skeleton-shape="circle">  ← circle bone ✓
+      <p data-skeleton-lines="3">...   ← 3 text lines ✓
+    </feed-post>
+  </feed-list>
+</auto-skeleton>
+```
+
+The scanner discovers every visible element at any depth — no `data-skeleton-container` or manual hints required.
+
+## The `skeleton-id` attribute
+
+`skeleton-id` is the cache key. It must be unique per `<auto-skeleton>` instance on the page.
+
+```html
+<auto-skeleton skeleton-id="user-profile">...</auto-skeleton>
+<auto-skeleton skeleton-id="activity-feed">...</auto-skeleton>
+```
+
+<Callout type="warning">
+  Do not use the native `id` attribute for this — `<auto-skeleton>` intentionally uses `skeleton-id` to avoid conflicting with the element's own DOM identity.
+</Callout>
+
+## Options
+
+Pass options as a JavaScript object via the `.options` property:
+
+```ts
+const el = document.querySelector('auto-skeleton');
+el.options = {
+  animation: 'pulse',
+  cache: false,
+  debug: true,
+  minSize: 12,
+  ignoreSelectors: ['.ad-banner', '[data-no-skeleton]'],
+};
+```
+
+Inside Lit, use property binding:
+
+```ts
+html`
+  <auto-skeleton
+    skeleton-id="dashboard"
+    .loading=${this.loading}
+    .options=${{ animation: 'pulse', cache: true }}
+  >
+    <dashboard-widget></dashboard-widget>
+  </auto-skeleton>
+`
+```
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `animation` | `"wave" \| "pulse" \| "none"` | `"wave"` | Skeleton animation style. |
+| `debug` | `boolean` | `false` | Outline detected bones with dashed borders. |
+| `watch` | `boolean` | `true` | Re-scan when layout changes while not loading. |
+| `watchDebounceMs` | `number` | `120` | Debounce delay (ms) for watcher-triggered re-scans. |
+| `cache` | `boolean` | `true` | Cache bones in memory and `sessionStorage`. |
+| `minSize` | `number` | `8` | Minimum element dimension (px) to generate a bone. |
+| `ignoreSelectors` | `string[]` | `[]` | CSS selectors for elements to skip during scan. |
+
+## Theming
+
+Bones inherit from CSS custom properties on the host or any ancestor:
+
+```css
+auto-skeleton {
+  --as-base: #1e1e2e;          /* bone fill colour */
+  --as-highlight: rgba(255, 255, 255, 0.06); /* wave shimmer */
+}
+```
+
+See [Theming](/theming) for the full variable reference.
+
+## Data attributes
+
+All data-attribute overrides work the same as in the React package:
+
+```html
+<img data-skeleton-shape="circle" />
+<p  data-skeleton-lines="3" />
+<div data-skeleton-ignore></div>
+<nav data-skeleton-container></nav>
+```
+
+See [Data Attributes](/data-attributes) for the full reference.
+
+## Caching
+
+Bones are cached in two layers keyed by `skeleton-id` + viewport width:
+
+- **Memory** — instant lookup within the same page lifecycle
+- **`sessionStorage`** — survives re-renders and HMR, cleared on tab close
+
+To clear the cache programmatically:
+
+```ts
+import { clearCachedBones, clearAllCachedBones } from '@auto-skeleton/lit';
+
+clearCachedBones('my-skeleton-id');  // clear one entry
+clearAllCachedBones();               // clear all entries
+```
+
+## Full example — social feed
+
+```ts
+import { LitElement, html, css } from 'lit';
+import { customElement, property, state } from 'lit/decorators.js';
+import '@auto-skeleton/lit';
+
+@customElement('user-avatar')
+class UserAvatar extends LitElement {
+  @property({ type: String }) name = '';
+
+  static styles = css`
+    .avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, #6d28d9, #06d6a0);
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-weight: 700; font-size: 16px;
+    }
+  `;
+
+  render() {
+    const initial = this.name[0]?.toUpperCase() ?? '?';
+    return html`
+      <div class="avatar" data-skeleton-shape="circle">${initial}</div>
+    `;
+  }
+}
+
+@customElement('feed-post')
+class FeedPost extends LitElement {
+  @property({ type: String }) author = '';
+  @property({ type: String }) body = '';
+
+  static styles = css`
+    .post { padding: 1rem; border: 1px solid #e4e4e7; border-radius: 12px; }
+    .header { display: flex; gap: 0.75rem; align-items: center; margin-bottom: 0.75rem; }
+    .name { font-weight: 600; }
+    .body { color: #52525b; line-height: 1.6; }
+    .actions { display: flex; gap: 1rem; margin-top: 0.75rem; color: #a1a1aa; font-size: 0.875rem; }
+  `;
+
+  render() {
+    return html`
+      <div class="post">
+        <div class="header">
+          <user-avatar .name=${this.author}></user-avatar>
+          <span class="name">${this.author}</span>
+        </div>
+        <p class="body" data-skeleton-lines="3">${this.body}</p>
+        <div class="actions" data-skeleton-ignore>
+          <span>Like</span><span>Reply</span>
+        </div>
+      </div>
+    `;
+  }
+}
+
+@customElement('feed-app')
+class FeedApp extends LitElement {
+  @state() private loading = true;
+
+  connectedCallback() {
+    super.connectedCallback();
+    setTimeout(() => (this.loading = false), 2000);
+  }
+
+  render() {
+    return html`
+      <auto-skeleton skeleton-id="feed" .loading=${this.loading}>
+        <div data-skeleton-container>
+          <feed-post author="Alex Rivers" body="Just shipped recursive Shadow DOM support!"></feed-post>
+          <feed-post author="Sarah Chen" body="Does anyone have tips for Lit + TypeScript?"></feed-post>
+        </div>
+      </auto-skeleton>
+    `;
+  }
+}
+```
+
+## TypeScript
+
+The element is registered in `HTMLElementTagNameMap` so TypeScript picks up the correct type when you use `document.querySelector`:
+
+```ts
+import '@auto-skeleton/lit';
+import type { AutoSkeleton } from '@auto-skeleton/lit';
+
+const el = document.querySelector('auto-skeleton') as AutoSkeleton;
+el.loading = true;
+el.options = { animation: 'pulse' };
+```
