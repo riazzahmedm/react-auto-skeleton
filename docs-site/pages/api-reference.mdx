@@ -40,7 +40,68 @@ import { AutoSkeleton } from "@auto-skeleton/react";
 
 ---
 
-## `useAutoSkeleton`
+## Vue 3 — `<AutoSkeleton>`
+
+The Vue 3 component. Works identically to the React version — wrap any template subtree, pass `loading`.
+
+```vue
+<script setup lang="ts">
+import { AutoSkeleton } from "@auto-skeleton/vue";
+import "@auto-skeleton/vue/styles.css";
+</script>
+
+<template>
+  <AutoSkeleton id="unique-id" :loading="loading" :options="{ animation: 'wave' }">
+    <slot />
+  </AutoSkeleton>
+</template>
+```
+
+### Props
+
+| Prop | Type | Required | Description |
+|---|---|:---:|---|
+| `id` | `string` | ✅ | Unique cache key per instance. |
+| `loading` | `boolean` | ✅ | Shows skeleton overlay when `true`. |
+| `options` | `AutoSkeletonOptions` | | Same options object as React — see below. |
+
+---
+
+## Vue 3 — `useAutoSkeleton`
+
+Low-level composable for custom overlay integrations.
+
+```ts
+import { useAutoSkeleton } from "@auto-skeleton/vue";
+
+const { rootRef, bones, shouldShow, animation, debug } = useAutoSkeleton(
+  toRef(props, "id"),
+  toRef(props, "loading"),
+  toRef(props, "options")
+);
+```
+
+### Parameters
+
+| Parameter | Type | Description |
+|---|---|---|
+| `id` | `Ref<string>` | Unique cache key. |
+| `loading` | `Ref<boolean>` | Controls when bones are active. |
+| `options` | `Ref<AutoSkeletonOptions \| undefined>` | Optional configuration. |
+
+### Returns
+
+| Property | Type | Description |
+|---|---|---|
+| `rootRef` | `Ref<HTMLElement \| null>` | Attach to your container element. |
+| `bones` | `ComputedRef<Bone[] \| null>` | Detected bones, or `null` before first scan. |
+| `shouldShow` | `ComputedRef<boolean>` | `true` when `loading` and bones are ready. |
+| `animation` | `ComputedRef<string>` | Resolved animation (`"wave"` default). |
+| `debug` | `ComputedRef<boolean>` | Resolved debug flag. |
+
+---
+
+## React — `useAutoSkeleton`
 
 Low-level hook for custom integrations. Returns the scan state and a ref to attach to your container.
 

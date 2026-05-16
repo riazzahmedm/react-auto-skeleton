@@ -309,7 +309,7 @@ function Hero() {
           padding: "5px 14px", marginBottom: 28
         }}>
           <span style={{ width: 6, height: 6, borderRadius: "50%", background: "var(--accent-light)", display: "inline-block" }} />
-          Now on npm · v0.0.3
+          Now on npm · v0.0.5
         </div>
 
         {/* Headline */}
@@ -347,6 +347,34 @@ function Hero() {
             fontFamily: "'JetBrains Mono', monospace", fontSize: 13,
             color: "var(--text)", letterSpacing: "-0.01em"
           }}>npm install @auto-skeleton/react</code>
+        </div>
+
+        {/* Framework chips */}
+        <div className="fade-up fade-up-4" style={{
+          display: "flex", gap: 8, justifyContent: "center", flexWrap: "wrap",
+          marginBottom: 24
+        }}>
+          {[
+            { label: "React", color: "#61dafb" },
+            { label: "Next.js", color: "#e2e4f0" },
+            { label: "Lit", color: "#324fff" },
+            { label: "Vue 3", color: "#41b883" },
+            { label: "React Native", color: "#a78bfa", soon: true }
+          ].map(({ label, color, soon }) => (
+            <span
+              key={label}
+              style={{
+                fontSize: 11, fontWeight: 500, padding: "4px 11px", borderRadius: 999,
+                border: `1px solid ${color}33`,
+                background: `${color}11`,
+                color: soon ? "var(--text-muted)" : color,
+                letterSpacing: "0.01em",
+                opacity: soon ? 0.55 : 1
+              }}
+            >
+              {label}{soon ? " · soon" : ""}
+            </span>
+          ))}
         </div>
 
         {/* CTA buttons */}
@@ -487,6 +515,117 @@ function DemoRoot() {
 
       {/* Demo area */}
       <main style={{ maxWidth: 800, margin: "0 auto", padding: "60px 20px 120px" }}>
+        {/* Ecosystem section */}
+        <div style={{ marginBottom: 72 }}>
+          <div style={{
+            fontSize: 11, fontWeight: 600, letterSpacing: "0.1em",
+            color: "var(--accent-light)", textTransform: "uppercase",
+            fontFamily: "'JetBrains Mono', monospace",
+            marginBottom: 28, display: "flex", alignItems: "center", gap: 10
+          }}>
+            <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+            Packages
+            <div style={{ flex: 1, height: 1, background: "var(--border)" }} />
+          </div>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(220px, 1fr))", gap: 12 }}>
+            {[
+              {
+                pkg: "@auto-skeleton/react",
+                label: "React",
+                desc: "AutoSkeleton component + useAutoSkeleton hook",
+                color: "#61dafb",
+                href: "https://www.npmjs.com/package/@auto-skeleton/react",
+                stable: true
+              },
+              {
+                pkg: "@auto-skeleton/vue",
+                label: "Vue 3",
+                desc: "AutoSkeleton component + useAutoSkeleton composable",
+                color: "#41b883",
+                href: "https://www.npmjs.com/package/@auto-skeleton/vue",
+                stable: true
+              },
+              {
+                pkg: "@auto-skeleton/lit",
+                label: "Lit / Web Components",
+                desc: "<auto-skeleton> custom element with shadow DOM support",
+                color: "#324fff",
+                href: "https://www.npmjs.com/package/@auto-skeleton/lit",
+                stable: true
+              },
+              {
+                pkg: "@auto-skeleton/core",
+                label: "Core (framework-agnostic)",
+                desc: "DOM scanner — build your own adapter",
+                color: "#a78bfa",
+                href: "https://www.npmjs.com/package/@auto-skeleton/core",
+                stable: true
+              },
+              {
+                pkg: "@auto-skeleton/react-native",
+                label: "React Native",
+                desc: "Native skeleton support — coming soon",
+                color: "#a78bfa",
+                href: null,
+                stable: false
+              }
+            ].map(({ pkg, label, desc, color, href, stable }) => (
+              <a
+                key={pkg}
+                href={href ?? undefined}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: "block",
+                  background: "var(--bg-card)",
+                  border: `1px solid ${stable ? color + "22" : "var(--border)"}`,
+                  borderRadius: 12,
+                  padding: "16px 18px",
+                  textDecoration: "none",
+                  color: "inherit",
+                  opacity: stable ? 1 : 0.5,
+                  pointerEvents: stable ? "auto" : "none",
+                  transition: "border-color 0.2s, transform 0.2s"
+                }}
+                onMouseEnter={e => {
+                  if (!stable) return;
+                  (e.currentTarget as HTMLElement).style.borderColor = color + "55";
+                  (e.currentTarget as HTMLElement).style.transform = "translateY(-2px)";
+                }}
+                onMouseLeave={e => {
+                  (e.currentTarget as HTMLElement).style.borderColor = stable ? color + "22" : "var(--border)";
+                  (e.currentTarget as HTMLElement).style.transform = "translateY(0)";
+                }}
+              >
+                <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 8 }}>
+                  <span style={{
+                    width: 8, height: 8, borderRadius: "50%",
+                    background: color, flexShrink: 0,
+                    boxShadow: `0 0 6px ${color}66`
+                  }} />
+                  <span style={{ fontSize: 12, fontWeight: 600, color: "var(--text)", letterSpacing: "-0.01em" }}>
+                    {label}
+                  </span>
+                  {!stable && (
+                    <span style={{
+                      fontSize: 9, fontWeight: 600, letterSpacing: "0.06em",
+                      color: "var(--text-muted)", background: "var(--chip-bg)",
+                      border: "1px solid var(--border)", borderRadius: 4,
+                      padding: "1px 5px", marginLeft: "auto"
+                    }}>SOON</span>
+                  )}
+                </div>
+                <code style={{
+                  fontSize: 10, fontFamily: "'JetBrains Mono', monospace",
+                  color: color, display: "block", marginBottom: 6
+                }}>{pkg}</code>
+                <p style={{ margin: 0, fontSize: 11, color: "var(--text-muted)", lineHeight: 1.5 }}>{desc}</p>
+              </a>
+            ))}
+          </div>
+        </div>
+
+        {/* Components divider */}
         <div style={{
           fontSize: 11, fontWeight: 600, letterSpacing: "0.1em",
           color: "var(--accent-light)", textTransform: "uppercase",

@@ -9,6 +9,8 @@
   "data-attributes": "Data Attributes",
   "theming": "Theming",
   "nextjs": "Next.js",
+  "lit": "Lit & Web Components",
+  "vue": "Vue 3",
   "changelog": "Changelog",
   "agent": "Agent Prompt"
 }
