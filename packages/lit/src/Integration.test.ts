@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
+import { describe, expect, it, vi, beforeEach, afterEach, type Mock } from "vitest";
 import { LitElement, html, css } from "lit";
 import { customElement } from "lit/decorators.js";
 import "./index"; // registers auto-skeleton
@@ -45,27 +45,28 @@ beforeEach(() => {
   vi.clearAllMocks();
   vi.useFakeTimers();
 
-  // Mock computed styles globally for tests
-  vi.spyOn(window, "getComputedStyle").mockImplementation((el: Element) => {
-    return {
-      display: "block",
-      visibility: "visible",
-      opacity: "1",
-      fontSize: "16px",
-      lineHeight: "20px",
-      borderRadius: el.id === "inner-avatar" ? "50%" : "0px"
-    } as unknown as CSSStyleDeclaration;
-  });
+  // Stub getComputedStyle globally — vi.spyOn doesn't reliably intercept Window prototype methods in jsdom
+  vi.stubGlobal("getComputedStyle", (el: Element) => ({
+    display: "block",
+    visibility: "visible",
+    opacity: "1",
+    fontSize: "16px",
+    lineHeight: "20px",
+    borderLeftWidth: "0px",
+    borderTopWidth: "0px",
+    borderRadius: el.id === "inner-avatar" ? "50%" : "0px"
+  }));
 });
 
 afterEach(() => {
   vi.useRealTimers();
+  vi.unstubAllGlobals();
 });
 
 describe("AutoSkeleton Integration", () => {
   it("scans complex nested Shadow DOM structures accurately", async () => {
     const el = document.createElement("auto-skeleton") as AutoSkeleton;
-    el.id = "complex-test";
+    el.skeletonId = "complex-test";
     el.loading = false;
     el.innerHTML = `<outer-comp id="outer"></outer-comp>`;
     document.body.appendChild(el);
@@ -98,7 +99,7 @@ describe("AutoSkeleton Integration", () => {
     await el.updateComplete;
 
     const bones = (el as any).bones;
-    
+
     // Check if we found the deep nested bones
     const hasOuterText = bones.some((b: any) => b.y === 10 && b.width === 200);
     const hasInnerTitle = bones.some((b: any) => b.y === 60 && b.width === 100);

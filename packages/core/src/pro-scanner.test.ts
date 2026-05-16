@@ -1,4 +1,4 @@
-import { describe, expect, it, vi, beforeEach } from "vitest";
+import { describe, expect, it, vi, beforeEach, afterEach } from "vitest";
 import { scanBones } from "./scanner";
 
 function mockRect(el: Element, rect: Partial<DOMRect>): void {
@@ -27,6 +27,10 @@ describe("Pro Scanner Stress Tests", () => {
     vi.clearAllMocks();
   });
 
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it("handles SVG elements correctly", () => {
     const root = document.createElement("div");
     const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
@@ -34,6 +38,13 @@ describe("Pro Scanner Stress Tests", () => {
     svg.appendChild(circle);
     root.appendChild(svg);
     document.body.appendChild(root);
+
+    // jsdom returns "" for SVG element computed styles — stub global to give consistent values
+    vi.stubGlobal("getComputedStyle", () => ({
+      display: "block", visibility: "visible", opacity: "1",
+      borderLeftWidth: "0px", borderTopWidth: "0px", borderRadius: "0px",
+      fontSize: "16px", lineHeight: "20px"
+    }));
 
     mockRect(root, { top: 0, left: 0, width: 500, height: 500 });
     mockRect(svg, { top: 10, left: 10, width: 100, height: 100 });
@@ -49,9 +60,10 @@ describe("Pro Scanner Stress Tests", () => {
     root.appendChild(inner);
     document.body.appendChild(root);
 
-    vi.spyOn(window, "getComputedStyle").mockImplementation((el) => {
-        if (el === root) return { borderLeftWidth: "10px", borderTopWidth: "15px", display: "block", visibility: "visible", opacity: "1" } as any;
-        return { display: "block", visibility: "visible", opacity: "1", borderLeftWidth: "0px", borderTopWidth: "0px" } as any;
+    const base = { display: "block", visibility: "visible", opacity: "1", borderRadius: "0px", fontSize: "16px", lineHeight: "20px" };
+    vi.stubGlobal("getComputedStyle", (el: Element) => {
+      if (el === root) return { ...base, borderLeftWidth: "10px", borderTopWidth: "15px" };
+      return { ...base, borderLeftWidth: "0px", borderTopWidth: "0px" };
     });
 
     mockRect(root, { top: 0, left: 0, width: 500, height: 500 });

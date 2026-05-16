@@ -29,7 +29,7 @@ describe("AutoSkeleton Lit", () => {
     );
 
     const el = document.createElement("auto-skeleton") as AutoSkeleton;
-    el.id = "test";
+    el.skeletonId = "test";
     el.loading = true;
     el.options = { animation: "none" };
     document.body.appendChild(el);
@@ -44,7 +44,7 @@ describe("AutoSkeleton Lit", () => {
 
   it("does not render overlay when loading is false", async () => {
     const el = document.createElement("auto-skeleton") as AutoSkeleton;
-    el.id = "test2";
+    el.skeletonId = "test2";
     el.loading = false;
     el.innerHTML = "<div>content</div>";
     document.body.appendChild(el);
@@ -57,7 +57,7 @@ describe("AutoSkeleton Lit", () => {
 
   it("re-scans on resize when watch is enabled", async () => {
     const el = document.createElement("auto-skeleton") as AutoSkeleton;
-    el.id = "watch-true";
+    el.skeletonId = "watch-true";
     el.loading = false;
     el.options = { watch: true, watchDebounceMs: 10 };
     document.body.appendChild(el);
@@ -75,7 +75,7 @@ describe("AutoSkeleton Lit", () => {
 
   it("does not re-scan on resize when watch is disabled", async () => {
     const el = document.createElement("auto-skeleton") as AutoSkeleton;
-    el.id = "watch-false";
+    el.skeletonId = "watch-false";
     el.loading = false;
     el.options = { watch: false, watchDebounceMs: 10 };
     document.body.appendChild(el);
@@ -91,20 +91,23 @@ describe("AutoSkeleton Lit", () => {
     expect(scanBonesMock.mock.calls.length).toBe(baseline);
   });
 
-  it("updates bones when loading transitions from false to true", async () => {
+  it("shows overlay when loading flips true after a scan has run", async () => {
     const el = document.createElement("auto-skeleton") as AutoSkeleton;
-    el.id = "transition-test";
+    el.skeletonId = "transition-test";
     el.loading = false;
     document.body.appendChild(el);
     await el.updateComplete;
 
+    // Override mock so the scan that fires when loading→false returns distinct bones
     vi.mocked(core.scanBones).mockReturnValue([{ x: 10, y: 10, width: 50, height: 50, radius: 0, kind: "rect" }]);
-    
-    // Transition loading to false (this should trigger runScan in updated())
-    el.loading = false; 
+
+    // Trigger a scan explicitly (simulates loading going false again after data loads)
+    el.loading = true;
     await el.updateComplete;
-    
-    // Transition to loading true
+    el.loading = false;
+    await el.updateComplete; // updated() fires runScan here
+
+    // Now flip back to loading — bones exist, overlay should appear
     el.loading = true;
     await el.updateComplete;
 
@@ -114,7 +117,7 @@ describe("AutoSkeleton Lit", () => {
 
   it("clears cache when cache: false is set in options", async () => {
     const el = document.createElement("auto-skeleton") as AutoSkeleton;
-    el.id = "cache-disabled";
+    el.skeletonId = "cache-disabled";
     el.loading = false;
     el.options = { cache: true };
     document.body.appendChild(el);
@@ -140,7 +143,7 @@ describe("AutoSkeleton Lit", () => {
     );
 
     const el = document.createElement("auto-skeleton") as AutoSkeleton;
-    el.id = "debug-test";
+    el.skeletonId = "debug-test";
     el.loading = true;
     el.options = { debug: true };
     document.body.appendChild(el);
@@ -153,7 +156,7 @@ describe("AutoSkeleton Lit", () => {
 
   it("re-scans on DOM mutation when watch is enabled", async () => {
     const el = document.createElement("auto-skeleton") as AutoSkeleton;
-    el.id = "mutation-test";
+    el.skeletonId = "mutation-test";
     el.loading = false;
     el.options = { watch: true, watchDebounceMs: 10 };
     el.innerHTML = "<div>Initial</div>";
@@ -183,7 +186,7 @@ describe("AutoSkeleton Lit", () => {
     );
 
     const el = document.createElement("auto-skeleton") as AutoSkeleton;
-    el.id = "initial-loading";
+    el.skeletonId = "initial-loading";
     el.loading = true;
     document.body.appendChild(el);
 
@@ -202,7 +205,7 @@ describe("AutoSkeleton Lit", () => {
     );
 
     const el = document.createElement("auto-skeleton") as AutoSkeleton;
-    el.id = "id1";
+    el.skeletonId = "id1";
     el.loading = true;
     document.body.appendChild(el);
     await el.updateComplete;
@@ -210,7 +213,7 @@ describe("AutoSkeleton Lit", () => {
     expect(el.classList.contains("as-loading")).toBe(true);
 
     // Change to 'id2' which has no cache
-    el.id = "id2";
+    el.skeletonId = "id2";
     await el.updateComplete;
 
     expect(el.classList.contains("as-loading")).toBe(false);

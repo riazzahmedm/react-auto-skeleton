@@ -44,13 +44,12 @@ export function clearCachedBones(id: string): void {
 export function clearAllCachedBones(): void {
   memory.clear();
   if (typeof window === "undefined") return;
-  
-  // Clear all sessionStorage keys starting with auto-skeleton:
+
+  // Collect matching keys first to avoid index-shifting bugs during removal
+  const toRemove: string[] = [];
   for (let i = 0; i < window.sessionStorage.length; i++) {
-    const key = window.sessionStorage.key(i);
-    if (key?.startsWith("auto-skeleton:")) {
-      window.sessionStorage.removeItem(key);
-      i--; // Adjust index after removal
-    }
+    const k = window.sessionStorage.key(i);
+    if (k?.startsWith("auto-skeleton:")) toRemove.push(k);
   }
+  toRemove.forEach(k => window.sessionStorage.removeItem(k));
 }

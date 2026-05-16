@@ -271,7 +271,7 @@ export class DemoApp extends LitElement {
     const isCached = !!sessionStorage.getItem(`auto-skeleton:social-content-${this.view}::${window.innerWidth}`);
 
     return html`
-      <auto-skeleton id="social-nav" .loading=${this.shellLoading}>
+      <auto-skeleton skeleton-id="social-nav" .loading=${this.shellLoading}>
         <nav class="nav">
           <div class="logo"><div class="logo-icon"></div>SkeletonSocial</div>
           <user-avatar name="Jane Doe" size="32px"></user-avatar>
@@ -280,7 +280,7 @@ export class DemoApp extends LitElement {
 
       <div class="container">
         <aside>
-          <auto-skeleton id="social-profile" .loading=${this.shellLoading}>
+          <auto-skeleton skeleton-id="social-profile" .loading=${this.shellLoading}>
             <div class="profile-mini">
               <user-avatar name="Jane Doe" size="80px"></user-avatar>
               <h3>Jane Doe</h3>
@@ -288,7 +288,7 @@ export class DemoApp extends LitElement {
             </div>
           </auto-skeleton>
 
-          <auto-skeleton id="social-links" .loading=${this.shellLoading}>
+          <auto-skeleton skeleton-id="social-links" .loading=${this.shellLoading}>
             <div class="nav-links">
               <div class="link ${this.view === 'feed' ? 'active' : ''}" @click=${() => this.setView('feed')}>Feed</div>
               <div class="link ${this.view === 'explore' ? 'active' : ''}" @click=${() => this.setView('explore')}>Explore</div>
@@ -297,7 +297,7 @@ export class DemoApp extends LitElement {
           </auto-skeleton>
         </aside>
 
-        <auto-skeleton id="social-content-${this.view}" .loading=${this.contentLoading}>
+        <auto-skeleton skeleton-id="social-content-${this.view}" .loading=${this.contentLoading}>
           ${this.renderContent()}
         </auto-skeleton>
       </div>

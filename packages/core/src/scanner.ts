@@ -10,7 +10,8 @@ function isVisible(el: Element): boolean {
   if (!(el instanceof HTMLElement) && !(el instanceof SVGElement)) return false;
   const style = window.getComputedStyle(el);
   if (style.display === "none" || style.visibility === "hidden" || style.visibility === "collapse") return false;
-  if (Number(style.opacity) === 0) return false;
+  // Use parseFloat so an empty string (e.g. SVG elements in jsdom) is treated as "not 0"
+  if (style.opacity !== "" && Number(style.opacity) === 0) return false;
   
   // Check for zero-sized elements that aren't display: contents
   const rect = el.getBoundingClientRect();
@@ -192,9 +193,16 @@ export function scanBones(root: HTMLElement, options: ScanOptions = {}): Bone[] 
     }
   }
 
-  // Start walking from children to avoid scanning the root itself as a bone
+  // Start walking from light DOM children to avoid scanning the root itself as a bone
   for (const child of Array.from(root.children)) {
     walk(child);
+  }
+
+  // Also walk shadow DOM children of root (e.g. when root is a custom element / Lit component)
+  if (root.shadowRoot) {
+    for (const child of Array.from(root.shadowRoot.children)) {
+      walk(child);
+    }
   }
 
   return dedupeBones(bones);
