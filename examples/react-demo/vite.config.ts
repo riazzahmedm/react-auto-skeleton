@@ -11,7 +11,8 @@ export default defineConfig({
   resolve: {
     alias: {
       "@auto-skeleton/react": path.resolve(__dirname, "../../packages/react/src/index.ts"),
-      "@auto-skeleton/core": path.resolve(__dirname, "../../packages/core/src/index.ts")
+      "@auto-skeleton/core": path.resolve(__dirname, "../../packages/core/src/index.ts"),
+      "@auto-skeleton/lit": path.resolve(__dirname, "../../packages/lit/src/index.ts")
     }
   }
 });

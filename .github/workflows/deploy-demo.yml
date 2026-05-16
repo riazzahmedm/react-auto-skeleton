@@ -35,6 +35,9 @@ jobs:
       - name: Build core
         run: npm run --workspace @auto-skeleton/core build
 
+      - name: Build lit
+        run: npm run --workspace @auto-skeleton/lit build
+
       - name: Build demo
         run: npm run demo:build
 
