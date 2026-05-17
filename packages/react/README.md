@@ -133,6 +133,15 @@ Returns `ref` (attach to container), `bones` (array of detected bone objects), `
 
 ---
 
+## Ecosystem
+
+| Package | Description |
+|---|---|
+| [`@auto-skeleton/react`](https://www.npmjs.com/package/@auto-skeleton/react) | React component and hook |
+| [`@auto-skeleton/vue`](https://www.npmjs.com/package/@auto-skeleton/vue) | Vue 3 component and composable |
+| [`@auto-skeleton/lit`](https://www.npmjs.com/package/@auto-skeleton/lit) | Lit / Web Component |
+| [`@auto-skeleton/core`](https://www.npmjs.com/package/@auto-skeleton/core) | Framework-agnostic DOM scanner |
+
 ## License
 
-MIT © [Riaz Ahmed](https://github.com/riazzahmedm)
+MIT
