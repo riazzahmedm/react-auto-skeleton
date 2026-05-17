@@ -1,0 +1,308 @@
+# Vue 3
+
+Zero-config skeleton loaders for Vue 3. Wrap any component — `auto-skeleton` scans the live DOM and generates a pixel-accurate skeleton overlay. No manual shapes, no config files, no CLI step.
+
+## Installation
+
+```bash
+npm install @auto-skeleton/vue
+```
+
+## Import styles
+
+Add the stylesheet once — typically in your root `main.ts` or top-level layout:
+
+```ts
+import "@auto-skeleton/vue/styles.css";
+```
+
+## Quick start
+
+Wrap any component with `<AutoSkeleton>` and pass a `loading` boolean:
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import { AutoSkeleton } from "@auto-skeleton/vue";
+import "@auto-skeleton/vue/styles.css";
+
+const loading = ref(true);
+
+async function fetchUser() {
+  await loadUserData();
+  loading.value = false;
+}
+fetchUser();
+</script>
+
+<template>
+  <AutoSkeleton id="user-profile" :loading="loading">
+    <div class="profile">
+      <img :src="user.avatar" alt="avatar" />
+      <h2>{{ user.name }}</h2>
+      <p>{{ user.bio }}</p>
+    </div>
+  </AutoSkeleton>
+</template>
+```
+
+When `loading` is `true`, the real UI is replaced with a skeleton that mirrors its exact layout. When `loading` flips back to `false`, the real content reappears instantly from cache.
+
+import { Callout } from 'nextra/components'
+
+<Callout type="info">
+  The `id` prop must be unique per `<AutoSkeleton>` instance on the page. It is used as the cache key in memory and `sessionStorage`.
+</Callout>
+
+## Props
+
+| Prop | Type | Required | Description |
+|---|---|:---:|---|
+| `id` | `string` | ✅ | Unique cache key per instance. |
+| `loading` | `boolean` | ✅ | Shows the skeleton overlay when `true`. |
+| `options` | `AutoSkeletonOptions` | | Fine-tune animation, caching, and scan behaviour. |
+
+## Options
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `animation` | `"wave" \| "pulse" \| "none"` | `"wave"` | Skeleton animation style. |
+| `debug` | `boolean` | `false` | Outline detected bones with dashed borders. |
+| `watch` | `boolean` | `true` | Re-scan when layout changes while not loading. |
+| `watchDebounceMs` | `number` | `120` | Debounce delay for watcher-triggered re-scans. |
+| `cache` | `boolean` | `true` | Cache bones in memory and `sessionStorage`. |
+| `minSize` | `number` | `8` | Minimum element dimension (px) to generate a bone. |
+| `ignoreSelectors` | `string[]` | `[]` | CSS selectors for elements to skip during scan. |
+
+```vue
+<AutoSkeleton
+  id="settings-panel"
+  :loading="loading"
+  :options="{ animation: 'pulse', debug: true, minSize: 12 }"
+>
+  <SettingsPanel />
+</AutoSkeleton>
+```
+
+## Data attributes
+
+Fine-tune individual elements without changing render logic:
+
+```html
+<!-- Circle bone (avatars, icons) -->
+<img data-skeleton-shape="circle" />
+
+<!-- Simulate multi-line text -->
+<p data-skeleton-lines="3" />
+
+<!-- Skip this element entirely -->
+<div data-skeleton-ignore></div>
+
+<!-- Treat as a bone container — scans children, not the element itself -->
+<nav data-skeleton-container></nav>
+```
+
+## Theming
+
+Override CSS custom properties to match your design system:
+
+```css
+:root {
+  --as-base: #e4e4e7;
+  --as-highlight: rgba(255, 255, 255, 0.9);
+}
+```
+
+For dark mode:
+
+```css
+.dark {
+  --as-base: #1e1e2e;
+  --as-highlight: rgba(255, 255, 255, 0.04);
+}
+```
+
+The `--as-base` variable sets the bone colour and `--as-highlight` sets the shimmer sweep colour for the wave animation.
+
+## `useAutoSkeleton` composable
+
+Low-level composable for custom integrations. Use it when you need direct access to the scan state or want to build your own overlay component.
+
+```ts
+import { useAutoSkeleton } from "@auto-skeleton/vue";
+
+const { rootRef, bones, shouldShow, animation, debug } = useAutoSkeleton(
+  toRef(props, "id"),
+  toRef(props, "loading"),
+  toRef(props, "options")
+);
+```
+
+### Parameters
+
+Each parameter is a `Ref` — the composable reacts to changes automatically.
+
+| Parameter | Type | Description |
+|---|---|---|
+| `id` | `Ref<string>` | Unique cache key. |
+| `loading` | `Ref<boolean>` | Controls when to scan and show bones. |
+| `options` | `Ref<AutoSkeletonOptions \| undefined>` | Optional configuration. |
+
+### Returns
+
+| Property | Type | Description |
+|---|---|---|
+| `rootRef` | `Ref<HTMLElement \| null>` | Attach to the container element to scan. |
+| `bones` | `ComputedRef<Bone[] \| null>` | Current array of detected bones, or `null` before first scan. |
+| `shouldShow` | `ComputedRef<boolean>` | `true` when `loading` is `true` and bones have been scanned. |
+| `animation` | `ComputedRef<string>` | Resolved animation value (defaults to `"wave"`). |
+| `debug` | `ComputedRef<boolean>` | Resolved debug flag (defaults to `false`). |
+
+### Custom overlay example
+
+```vue
+<script setup lang="ts">
+import { toRef } from "vue";
+import { useAutoSkeleton } from "@auto-skeleton/vue";
+import type { AutoSkeletonOptions } from "@auto-skeleton/vue";
+
+const props = defineProps<{
+  id: string;
+  loading: boolean;
+  options?: AutoSkeletonOptions;
+}>();
+
+const { rootRef, bones, shouldShow } = useAutoSkeleton(
+  toRef(props, "id"),
+  toRef(props, "loading"),
+  toRef(props, "options")
+);
+</script>
+
+<template>
+  <div ref="rootRef" style="position: relative">
+    <slot />
+    <div v-if="shouldShow" class="my-overlay">
+      <div
+        v-for="(bone, i) in bones"
+        :key="i"
+        class="my-bone"
+        :style="{
+          position: 'absolute',
+          left: `${bone.x}px`,
+          top: `${bone.y}px`,
+          width: `${bone.width}px`,
+          height: `${bone.height}px`,
+        }"
+      />
+    </div>
+  </div>
+</template>
+```
+
+## Caching
+
+Bones are cached in two layers:
+
+1. **In-memory** — instant retrieval within the same session, keyed by `id`.
+2. **`sessionStorage`** — survives hard refreshes, keyed by `id` + current viewport width (so bones are re-scanned when the viewport changes).
+
+Set `options.cache = false` to disable both layers for an instance — useful when content changes between sessions.
+
+You can clear cache programmatically with the core utility:
+
+```ts
+import { clearCache, clearAllCache } from "@auto-skeleton/core";
+
+clearCache("user-profile");   // clear one key
+clearAllCache();              // clear everything
+```
+
+## TypeScript
+
+All types are exported from the package:
+
+```ts
+import type {
+  AutoSkeletonOptions,
+  Bone,
+} from "@auto-skeleton/vue";
+```
+
+### `AutoSkeletonOptions`
+
+```ts
+interface AutoSkeletonOptions {
+  animation?: "wave" | "pulse" | "none";
+  debug?: boolean;
+  watch?: boolean;
+  watchDebounceMs?: number;
+  cache?: boolean;
+  minSize?: number;
+  ignoreSelectors?: string[];
+}
+```
+
+### `Bone`
+
+```ts
+interface Bone {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  borderRadius?: string;
+  shape?: "rect" | "circle";
+}
+```
+
+## Full example — social feed
+
+```vue
+<script setup lang="ts">
+import { ref, onMounted } from "vue";
+import { AutoSkeleton } from "@auto-skeleton/vue";
+import "@auto-skeleton/vue/styles.css";
+import type { AutoSkeletonOptions } from "@auto-skeleton/vue";
+
+interface Post {
+  id: string;
+  author: string;
+  avatar: string;
+  body: string;
+  time: string;
+}
+
+const posts = ref<Post[]>([]);
+const loading = ref(true);
+
+const options: AutoSkeletonOptions = { animation: "wave" };
+
+onMounted(async () => {
+  posts.value = await fetchPosts();
+  loading.value = false;
+});
+</script>
+
+<template>
+  <AutoSkeleton id="social-feed" :loading="loading" :options="options">
+    <ul class="feed">
+      <li v-for="post in posts" :key="post.id" class="post">
+        <img
+          :src="post.avatar"
+          :alt="post.author"
+          data-skeleton-shape="circle"
+          class="avatar"
+        />
+        <div class="content">
+          <strong>{{ post.author }}</strong>
+          <span class="time">{{ post.time }}</span>
+          <p data-skeleton-lines="3">{{ post.body }}</p>
+        </div>
+      </li>
+    </ul>
+  </AutoSkeleton>
+</template>
+```
+
+The skeleton mirrors the exact layout of the feed on first load — profile circles, text lines, and spacing — without any manual configuration.

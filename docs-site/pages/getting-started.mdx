@@ -1,13 +1,16 @@
 # Getting Started
 
-## Choose your package
+## Choose your framework
 
-| Package | Framework | Custom element |
+| Framework | Package | Status |
 |---|---|---|
-| `@auto-skeleton/react` | React 18+ | No — uses a React component |
-| `@auto-skeleton/lit` | Lit, Vue, Svelte, vanilla JS | Yes — `<auto-skeleton>` web component |
+| React | `@auto-skeleton/react` | ✅ Stable |
+| Next.js | `@auto-skeleton/react` | ✅ Stable (see [Next.js guide](/nextjs)) |
+| Lit / Web Components | `@auto-skeleton/lit` | ✅ Stable (see [Lit guide](/lit)) |
+| Vue 3 | `@auto-skeleton/vue` | ✅ Stable (see [Vue guide](/vue)) |
+| React Native | coming soon | 🚧 |
 
-Both packages use the same `@auto-skeleton/core` scanner under the hood and support the same [data attributes](/data-attributes), [theming](/theming), and [options](/api-reference).
+All packages share the same `@auto-skeleton/core` scanner and options API. Pick the package for your framework and everything else works the same.
 
 ---
 
@@ -19,7 +22,7 @@ Both packages use the same `@auto-skeleton/core` scanner under the hood and supp
 npm install @auto-skeleton/react
 ```
 
-## Import styles
+### Import styles
 
 Add the stylesheet once — typically in your root layout or `_app.tsx`:
 
@@ -27,7 +30,7 @@ Add the stylesheet once — typically in your root layout or `_app.tsx`:
 import "@auto-skeleton/react/styles.css";
 ```
 
-## Quick start
+### Quick start
 
 Wrap any component with `<AutoSkeleton>` and pass a `loading` boolean:
 
@@ -52,7 +55,7 @@ function UserProfile({ userId }: { userId: string }) {
 
 When `loading` is `true`, the real UI is replaced with a skeleton that mirrors its exact layout. When `loading` flips back to `false`, the real content reappears instantly from cache.
 
-## How the scan works
+### How the scan works
 
 On the first non-loading render, `auto-skeleton` scans the DOM inside `<AutoSkeleton>`, extracts bone positions, and caches them. Every subsequent loading state shows the skeleton immediately — no layout shift.
 
@@ -100,4 +103,42 @@ The scanner traverses Shadow DOM boundaries automatically — nested Lit compone
 
 <Callout type="info">
   See the [Lit & Web Components](/lit) page for the full guide, including Shadow DOM traversal details, options, and TypeScript types.
+</Callout>
+
+---
+
+## Vue 3
+
+### Installation
+
+```bash
+npm install @auto-skeleton/vue
+```
+
+### Import styles
+
+```ts
+import "@auto-skeleton/vue/styles.css";
+```
+
+### Quick start
+
+```vue
+<script setup lang="ts">
+import { ref } from "vue";
+import { AutoSkeleton } from "@auto-skeleton/vue";
+import "@auto-skeleton/vue/styles.css";
+
+const loading = ref(true);
+</script>
+
+<template>
+  <AutoSkeleton id="user-profile" :loading="loading">
+    <UserProfileCard />
+  </AutoSkeleton>
+</template>
+```
+
+<Callout type="info">
+  See the [Vue 3](/vue) page for the full guide, including the `useAutoSkeleton` composable, data attributes, theming, and TypeScript types.
 </Callout>

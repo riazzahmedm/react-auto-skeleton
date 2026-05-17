@@ -1,6 +1,21 @@
 # Changelog
 
-## @auto-skeleton/lit v0.0.5 — May 2026 🎉
+## @auto-skeleton/vue v0.0.5 — May 2026
+
+### Features
+
+First release of the Vue 3 adapter.
+
+- **`<AutoSkeleton>` component** — wraps any template subtree, scans the live DOM on first render, replaces it with a pixel-accurate skeleton overlay when `loading` is `true`
+- **`useAutoSkeleton` composable** — low-level composable returning `rootRef`, `bones`, `shouldShow`, `animation`, `debug`
+- **Reactive options** — all options are reactive; changes to `id`, `loading`, or `options` trigger re-scans automatically
+- **ResizeObserver watch mode** — re-scans on layout changes with a debounced `MutationObserver` + `ResizeObserver` combo; falls back to `window.resize` when `ResizeObserver` is unavailable
+- **Dual-layer caching** — bones cached in memory and `sessionStorage`, keyed by `id` + viewport width
+- **All core features** — data attributes, wave/pulse/none animation, debug mode, theming via CSS variables, `minSize`, `ignoreSelectors`
+
+---
+
+## @auto-skeleton/lit v0.0.5 — May 2026
 
 First release of the Lit & Web Components package.
 

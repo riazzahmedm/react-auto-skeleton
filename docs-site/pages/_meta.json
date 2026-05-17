@@ -8,8 +8,9 @@
   "api-reference": "API Reference",
   "data-attributes": "Data Attributes",
   "theming": "Theming",
-  "lit": "Lit & Web Components",
   "nextjs": "Next.js",
+  "lit": "Lit & Web Components",
+  "vue": "Vue 3",
   "changelog": "Changelog",
   "agent": "Agent Prompt"
 }
