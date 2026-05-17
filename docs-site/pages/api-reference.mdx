@@ -1,6 +1,8 @@
 # API Reference
 
-## `<AutoSkeleton>`
+## React — `@auto-skeleton/react`
+
+### `<AutoSkeleton>`
 
 The main component. Wraps any subtree and replaces it with a skeleton overlay when `loading` is `true`.
 
@@ -134,3 +136,83 @@ function MyComponent({ loading }: { loading: boolean }) {
 | `ref` | `RefObject<HTMLDivElement>` | Attach to the container element you want scanned. |
 | `bones` | `Bone[]` | Current array of detected bones. |
 | `isScanning` | `boolean` | `true` while a scan is in progress. |
+
+---
+
+## Lit & Web Components — `@auto-skeleton/lit`
+
+### `<auto-skeleton>`
+
+A native custom element. Works in any framework or vanilla JS. Registered automatically on import.
+
+```ts
+import '@auto-skeleton/lit';
+```
+
+```html
+<auto-skeleton skeleton-id="profile" loading>
+  <user-profile></user-profile>
+</auto-skeleton>
+```
+
+### Attributes & properties
+
+| Name | Type | Required | Description |
+|---|---|:---:|---|
+| `skeleton-id` | `string` (attribute) | ✅ | Unique cache key. Maps to the `skeletonId` JS property. |
+| `loading` | `boolean` (property) | ✅ | When `true`, shows the skeleton overlay. Presence of the attribute also sets `true`. |
+| `options` | `AutoSkeletonOptions` (property only) | | Fine-tune scan and animation behaviour. Set via JS or Lit property binding. |
+
+import { Callout } from 'nextra/components'
+
+<Callout type="info">
+  Use `.options` (property binding) rather than an attribute, as the options object cannot be serialised to a string attribute. In Lit: `.options=${{ animation: "pulse" }}`.
+</Callout>
+
+### `AutoSkeletonOptions`
+
+Same shape as the React package:
+
+| Option | Type | Default | Description |
+|---|---|---|---|
+| `animation` | `"wave" \| "pulse" \| "none"` | `"wave"` | Skeleton animation style. |
+| `debug` | `boolean` | `false` | Outline detected bones with dashed borders. |
+| `watch` | `boolean` | `true` | Re-scan when layout changes while not loading. |
+| `watchDebounceMs` | `number` | `120` | Debounce delay (ms) for watcher-triggered re-scans. |
+| `cache` | `boolean` | `true` | Cache bones in memory and `sessionStorage`. |
+| `minSize` | `number` | `8` | Minimum element dimension (px) to generate a bone. |
+| `ignoreSelectors` | `string[]` | `[]` | CSS selectors for elements to skip during scan. |
+
+### Cache utilities
+
+```ts
+import { clearCachedBones, clearAllCachedBones } from '@auto-skeleton/lit';
+
+clearCachedBones('profile');   // clear one cache entry
+clearAllCachedBones();         // clear all entries
+```
+
+---
+
+## Core — `@auto-skeleton/core`
+
+Framework-agnostic scanner. Used internally by both packages. Import directly for custom integrations.
+
+```ts
+import { scanBones } from '@auto-skeleton/core';
+
+const bones = scanBones(containerElement, {
+  minSize: 8,
+  ignoreSelectors: ['.ad'],
+});
+```
+
+### `scanBones(root, options?)`
+
+| Parameter | Type | Description |
+|---|---|---|
+| `root` | `HTMLElement` | The element to scan. Children and shadow DOM are traversed recursively. |
+| `options.minSize` | `number` | Minimum bone dimension in px. Default `8`. |
+| `options.ignoreSelectors` | `string[]` | Elements matching these selectors are skipped. |
+
+Returns `Bone[]` — an array of `{ x, y, width, height, radius, kind }` objects positioned relative to `root`.

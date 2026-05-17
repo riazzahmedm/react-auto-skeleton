@@ -15,7 +15,29 @@ First release of the Vue 3 adapter.
 
 ---
 
-## v0.0.5 — May 2026
+## @auto-skeleton/lit v0.0.5 — May 2026
+
+First release of the Lit & Web Components package.
+
+### Features
+
+- **`<auto-skeleton>` custom element** — zero-config skeleton loaders as a native web component, works in any framework or vanilla JS
+- **Recursive Shadow DOM traversal** — the scanner crosses Shadow DOM boundaries automatically, so deeply nested Lit components are discovered without configuration
+- **`skeleton-id` attribute** — unique cache key per instance (uses `skeleton-id` rather than `id` to avoid shadowing the native DOM attribute)
+- **Property binding support** — use `.loading=${bool}` and `.options=${{...}}` in Lit templates for ergonomic integration
+- **Slotted content scanning** — uses `slot.assignedElements()` to scan light-DOM content with correct coordinate offsets
+- **All React package features** — wave/pulse/none animations, dual-layer caching, watch mode, debug mode, CSS variable theming, reduced-motion support
+- **`clearCachedBones` / `clearAllCachedBones`** — programmatic cache control exported from the package
+
+### Install
+
+```bash
+npm install @auto-skeleton/lit lit
+```
+
+---
+
+## @auto-skeleton/react v0.0.5 — May 2026
 
 ### Fix
 

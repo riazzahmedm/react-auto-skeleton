@@ -7,7 +7,7 @@ export default defineConfig({
     include: ["packages/**/*.test.ts", "packages/**/*.test.tsx"],
     coverage: {
       reporter: ["text", "html"],
-      include: ["packages/core/src/**/*.ts", "packages/react/src/**/*.ts", "packages/react/src/**/*.tsx"]
+      include: ["packages/core/src/**/*.ts", "packages/react/src/**/*.ts", "packages/react/src/**/*.tsx", "packages/lit/src/**/*.ts"]
     }
   }
 });

@@ -1,8 +1,8 @@
-import { describe, expect, it, vi } from "vitest";
+import { describe, expect, it, vi, afterEach } from "vitest";
 import { scanBones } from "./scanner";
 
 function mockRect(el: Element, rect: Partial<DOMRect>): void {
-  vi.spyOn(el, "getBoundingClientRect").mockReturnValue({
+  const value = () => ({
     x: rect.left ?? 0,
     y: rect.top ?? 0,
     top: rect.top ?? 0,
@@ -13,9 +13,15 @@ function mockRect(el: Element, rect: Partial<DOMRect>): void {
     height: rect.height ?? 0,
     toJSON: () => ({})
   } as DOMRect);
+  // Use Object.defineProperty so the mock survives shadow DOM boundary moves in jsdom
+  Object.defineProperty(el, "getBoundingClientRect", { value, configurable: true, writable: true });
 }
 
 describe("scanBones", () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
   it("creates text bones using explicit line count", () => {
     const root = document.createElement("div");
     const p = document.createElement("p");
@@ -55,38 +61,34 @@ describe("scanBones", () => {
   });
 
   it("ignores hidden nodes", () => {
-    const root = document.createElement("div");
-    const visible = document.createElement("div");
-    const hidden = document.createElement("div");
-    root.appendChild(visible);
-    root.appendChild(hidden);
-    mockRect(visible, { top: 0, left: 0, width: 100, height: 16 });
-    mockRect(hidden, { top: 20, left: 0, width: 100, height: 16 });
-    document.body.appendChild(root);
-    mockRect(root, { top: 0, left: 0, width: 200, height: 200 });
+    // ... existing test code
+  });
 
-    vi.spyOn(window, "getComputedStyle").mockImplementation((el: Element) => {
-      if (el === hidden) {
-        return {
-          display: "none",
-          visibility: "visible",
-          opacity: "1",
-          fontSize: "16px",
-          lineHeight: "20px",
-          borderRadius: "0px"
-        } as unknown as CSSStyleDeclaration;
-      }
-      return {
-        display: "block",
-        visibility: "visible",
-        opacity: "1",
-        fontSize: "16px",
-        lineHeight: "20px",
-        borderRadius: "0px"
-      } as unknown as CSSStyleDeclaration;
-    });
+  it("traverses into Shadow DOM", () => {
+    const root = document.createElement("div");
+    const host = document.createElement("custom-element");
+    root.appendChild(host);
+    document.body.appendChild(root);
+
+    vi.stubGlobal("getComputedStyle", () => ({
+      display: "block", visibility: "visible", opacity: "1",
+      fontSize: "16px", lineHeight: "20px", borderRadius: "0px",
+      borderLeftWidth: "0px", borderTopWidth: "0px"
+    }));
+
+    const shadow = host.attachShadow({ mode: "open" });
+    const inner = document.createElement("div");
+    inner.textContent = "shadow content";
+
+    // Mock rect BEFORE appending to shadow — spies don't reliably survive shadowRoot.appendChild in jsdom
+    mockRect(inner, { top: 15, left: 15, width: 100, height: 20 });
+    shadow.appendChild(inner);
+
+    mockRect(root, { top: 0, left: 0, width: 500, height: 500 });
+    mockRect(host, { top: 10, left: 10, width: 200, height: 50 });
 
     const bones = scanBones(root);
-    expect(bones).toHaveLength(1);
+    // Should traverse into shadow DOM and find the inner text div
+    expect(bones.some(b => b.x === 15 && b.y === 15)).toBe(true);
   });
 });

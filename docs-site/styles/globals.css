@@ -1,0 +1,317 @@
+/* ── Fonts ───────────────────────────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=clash-display@600,700,800&display=swap');
+
+/* ── Nextra accent → purple ──────────────────────────────────────────────── */
+:root {
+  --nextra-primary-hue: 262deg;
+  --nextra-primary-saturation: 72%;
+}
+
+/* ── Base ────────────────────────────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  font-family: 'Inter', ui-sans-serif, system-ui, sans-serif !important;
+  font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  font-size: 15px;
+}
+
+/* ── Light mode ──────────────────────────────────────────────────────────── */
+:root {
+  --bg: #ffffff;
+  --bg-sidebar: #fafafa;
+  --border: rgba(0,0,0,0.08);
+  --text: #111827;
+  --text-muted: #6b7280;
+}
+
+/* ── Dark mode ───────────────────────────────────────────────────────────── */
+.dark body { background-color: #09090f !important; }
+.dark { --bg-sidebar: #09090f; --border-color: rgba(255,255,255,0.07); }
+.dark .nextra-nav-container-blur { background-color: #09090f !important; }
+
+/* ── Navbar ──────────────────────────────────────────────────────────────── */
+.nextra-nav-container nav {
+  height: 56px !important;
+  padding: 0 24px !important;
+  border-bottom: 1px solid rgba(0,0,0,0.07) !important;
+}
+.dark .nextra-nav-container nav {
+  background: rgba(9,9,15,0.92) !important;
+  border-bottom-color: rgba(255,255,255,0.06) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+/* ── Sidebar ─────────────────────────────────────────────────────────────── */
+.nextra-sidebar-container {
+  width: 232px !important;
+  padding: 20px 0 !important;
+}
+.dark .nextra-sidebar-container {
+  background-color: #09090f !important;
+  border-right: 1px solid rgba(255,255,255,0.06) !important;
+}
+.nextra-sidebar-container {
+  border-right: 1px solid rgba(0,0,0,0.07) !important;
+}
+
+/* sidebar links */
+.nextra-sidebar-container li a,
+.nextra-sidebar-container li button {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13.5px !important;
+  font-weight: 400 !important;
+  line-height: 1.4 !important;
+  border-radius: 6px !important;
+  padding: 6px 12px !important;
+  color: #6b7280 !important;
+  transition: background 0.1s, color 0.1s !important;
+}
+
+.nextra-sidebar-container li a:hover {
+  background: rgba(0,0,0,0.04) !important;
+  color: #111827 !important;
+}
+.dark .nextra-sidebar-container li a:hover {
+  background: rgba(255,255,255,0.05) !important;
+  color: #e2e8f0 !important;
+}
+
+/* active — left border indicator, no background */
+.nextra-sidebar-container li a[aria-current="page"],
+.nextra-sidebar-container li.active > a {
+  background: transparent !important;
+  color: #7c3aed !important;
+  font-weight: 500 !important;
+  border-left: 2px solid #7c3aed !important;
+  border-radius: 0 !important;
+  padding-left: 10px !important;
+}
+.dark .nextra-sidebar-container li a[aria-current="page"],
+.dark .nextra-sidebar-container li.active > a {
+  background: transparent !important;
+  color: #a78bfa !important;
+  border-left-color: #a78bfa !important;
+}
+
+/* section titles */
+.nextra-sidebar-container .nx-text-xs {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.07em !important;
+  text-transform: uppercase !important;
+  color: #9ca3af !important;
+  padding: 0 12px !important;
+  margin: 16px 0 4px !important;
+}
+
+/* ── Typography ──────────────────────────────────────────────────────────── */
+article h1 {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 2.25rem !important;
+  font-weight: 800 !important;
+  letter-spacing: -0.03em !important;
+  line-height: 1.15 !important;
+  color: #0f172a !important;
+  margin-bottom: 0.5rem !important;
+}
+.dark article h1 { color: #f8fafc !important; }
+
+article h2 {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  letter-spacing: -0.01em !important;
+  color: #1e293b !important;
+  margin-top: 2.5rem !important;
+  margin-bottom: 0.75rem !important;
+  padding-bottom: 0.5rem !important;
+  border-bottom: 1px solid #e2e8f0 !important;
+}
+.dark article h2 {
+  color: #e2e8f0 !important;
+  border-bottom-color: rgba(255,255,255,0.08) !important;
+}
+
+article h3 {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 0.875rem !important;
+  font-weight: 600 !important;
+  color: #374151 !important;
+  margin-top: 1.75rem !important;
+  margin-bottom: 0.4rem !important;
+}
+.dark article h3 { color: #cbd5e1 !important; }
+
+article p {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 14.5px !important;
+  line-height: 1.75 !important;
+  color: #4b5563 !important;
+}
+.dark article p { color: #94a3b8 !important; }
+
+article li {
+  font-size: 14.5px !important;
+  line-height: 1.75 !important;
+  color: #4b5563 !important;
+}
+.dark article li { color: #94a3b8 !important; }
+
+/* ── Breadcrumb — hidden (repeats the page title) ────────────────────────── */
+.nextra-breadcrumb { display: none !important; }
+
+/* ── Inline code ─────────────────────────────────────────────────────────── */
+:not(pre) > code {
+  font-family: 'JetBrains Mono', ui-monospace, monospace !important;
+  font-size: 12px !important;
+  padding: 2px 6px !important;
+  border-radius: 5px !important;
+}
+:not(pre) > code {
+  background: #f3f4f6 !important;
+  color: #4b5563 !important;
+  border: 1px solid #e5e7eb !important;
+}
+.dark :not(pre) > code {
+  background: rgba(124,58,237,0.1) !important;
+  color: #a78bfa !important;
+  border: 1px solid rgba(124,58,237,0.18) !important;
+}
+
+/* ── Code blocks ─────────────────────────────────────────────────────────── */
+pre, code { font-family: 'JetBrains Mono', ui-monospace, monospace !important; }
+
+pre {
+  font-size: 13px !important;
+  line-height: 1.65 !important;
+  border-radius: 10px !important;
+  border: 1px solid #e5e7eb !important;
+}
+.dark pre {
+  background: #0e0e1a !important;
+  border-color: rgba(255,255,255,0.07) !important;
+}
+
+.dark .nextra-code-block > div:first-child {
+  background: #12121e !important;
+  border-bottom: 1px solid rgba(255,255,255,0.06) !important;
+  font-family: 'Inter', sans-serif !important;
+  font-size: 11.5px !important;
+}
+
+/* ── Table ───────────────────────────────────────────────────────────────── */
+article table {
+  font-size: 13.5px !important;
+  border-collapse: collapse !important;
+  width: 100% !important;
+}
+article table th {
+  font-size: 11px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.06em !important;
+  text-transform: uppercase !important;
+  color: #6b7280 !important;
+  padding: 10px 16px !important;
+  background: #f9fafb !important;
+  border: 1px solid #e5e7eb !important;
+}
+.dark article table th {
+  background: rgba(255,255,255,0.04) !important;
+  color: #64748b !important;
+  border-color: rgba(255,255,255,0.07) !important;
+}
+article table td {
+  padding: 10px 16px !important;
+  border: 1px solid #e5e7eb !important;
+  line-height: 1.6 !important;
+  vertical-align: middle !important;
+}
+.dark article table td { border-color: rgba(255,255,255,0.07) !important; }
+
+/* ── TOC ─────────────────────────────────────────────────────────────────── */
+.nextra-toc { padding-top: 20px !important; }
+.nextra-toc .nx-text-xs {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 10.5px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.07em !important;
+  text-transform: uppercase !important;
+  color: #9ca3af !important;
+  margin-bottom: 10px !important;
+}
+.nextra-toc ul li a {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 12.5px !important;
+  line-height: 1.6 !important;
+  color: #6b7280 !important;
+  padding: 3px 0 !important;
+}
+.nextra-toc ul li a:hover { color: #7c3aed !important; }
+.dark .nextra-toc ul li a { color: #64748b !important; }
+.dark .nextra-toc ul li a:hover { color: #a78bfa !important; }
+
+/* ── TOC active link ─────────────────────────────────────────────────────── */
+.nextra-toc ul li a[aria-selected="true"],
+.nextra-toc ul li a.nx-font-medium,
+.nextra-toc ul li a.nx-text-primary-600 {
+  color: #7c3aed !important;
+  font-weight: 500 !important;
+}
+.dark .nextra-toc ul li a[aria-selected="true"],
+.dark .nextra-toc ul li a.nx-font-medium,
+.dark .nextra-toc ul li a.nx-text-primary-600 {
+  color: #a78bfa !important;
+}
+
+/* ── Callout ─────────────────────────────────────────────────────────────── */
+.nextra-callout {
+  border-radius: 8px !important;
+  font-size: 13.5px !important;
+}
+.dark .nextra-callout {
+  background: rgba(124,58,237,0.07) !important;
+  border-color: rgba(124,58,237,0.2) !important;
+}
+
+/* ── Search ──────────────────────────────────────────────────────────────── */
+.nextra-search input {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  border-radius: 8px !important;
+}
+.dark .nextra-search input {
+  background: rgba(255,255,255,0.05) !important;
+  border: 1px solid rgba(255,255,255,0.08) !important;
+}
+
+/* ── Prev / Next ─────────────────────────────────────────────────────────── */
+.nextra-navigation-links a {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  border-radius: 10px !important;
+}
+.dark .nextra-navigation-links a {
+  border: 1px solid rgba(255,255,255,0.08) !important;
+  background: rgba(255,255,255,0.02) !important;
+}
+.dark .nextra-navigation-links a:hover {
+  border-color: rgba(124,58,237,0.3) !important;
+  background: rgba(124,58,237,0.05) !important;
+}
+
+/* ── Footer ──────────────────────────────────────────────────────────────── */
+footer { font-family: 'Inter', sans-serif !important; }
+.dark footer {
+  border-top: 1px solid rgba(255,255,255,0.06) !important;
+  background: #09090f !important;
+}
+
+/* ── Scrollbar ───────────────────────────────────────────────────────────── */
+.dark ::-webkit-scrollbar { width: 4px; height: 4px; }
+.dark ::-webkit-scrollbar-track { background: transparent; }
+.dark ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.1); border-radius: 4px; }

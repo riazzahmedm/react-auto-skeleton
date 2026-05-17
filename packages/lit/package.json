@@ -1,5 +1,5 @@
 {
-  "name": "@auto-skeleton/react",
+  "name": "@auto-skeleton/lit",
   "version": "0.0.5",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -9,8 +9,7 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.js",
       "require": "./dist/index.cjs"
-    },
-    "./styles.css": "./dist/styles.css"
+    }
   },
   "keywords": [
     "skeleton",
@@ -18,30 +17,26 @@
     "loading",
     "placeholder",
     "shimmer",
-    "react",
-    "react-skeleton",
+    "lit",
+    "web-components",
     "auto-skeleton",
     "dom",
     "zero-config",
     "ui",
     "ux"
   ],
-  "description": "Zero-config skeleton loaders for React. Scans the live DOM at runtime — no manual shapes, no CLI, no config files.",
+  "description": "Zero-config skeleton loaders for Lit and Web Components. Scans the live DOM at runtime — no manual shapes, no CLI, no config files.",
   "license": "MIT",
   "files": [
     "dist",
     "README.md"
   ],
-  "sideEffects": [
-    "**/*.css"
-  ],
   "scripts": {
-    "build": "tsup && cp src/styles.css dist/styles.css",
+    "build": "tsup",
     "typecheck": "tsc -p tsconfig.json --noEmit"
   },
   "peerDependencies": {
-    "react": ">=18",
-    "react-dom": ">=18"
+    "lit": ">=2"
   },
   "dependencies": {
     "@auto-skeleton/core": "0.0.5"
