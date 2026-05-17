@@ -4,6 +4,7 @@
 [![downloads](https://img.shields.io/npm/dm/@auto-skeleton/react?color=blue)](https://www.npmjs.com/package/@auto-skeleton/react)
 [![stars](https://img.shields.io/github/stars/riazzahmedm/react-auto-skeleton?style=flat&color=yellow)](https://github.com/riazzahmedm/react-auto-skeleton/stargazers)
 [![license](https://img.shields.io/github/license/riazzahmedm/react-auto-skeleton)](https://github.com/riazzahmedm/react-auto-skeleton/blob/main/LICENSE)
+[![npm vue](https://img.shields.io/npm/v/@auto-skeleton/vue?label=vue&color=41b883)](https://www.npmjs.com/package/@auto-skeleton/vue)
 
 Zero-config skeleton loaders for React. Wrap any component — auto-skeleton scans the live DOM at runtime and generates a pixel-accurate skeleton. No CLI, no build step, no config files to maintain.
 
@@ -40,6 +41,7 @@ auto-skeleton does neither. It measures your real rendered DOM with `getBounding
 | Package | Description |
 |---|---|
 | [`@auto-skeleton/react`](https://www.npmjs.com/package/@auto-skeleton/react) | React component and hook |
+| [`@auto-skeleton/vue`](https://www.npmjs.com/package/@auto-skeleton/vue) | Vue 3 component and composable |
 | [`@auto-skeleton/lit`](https://www.npmjs.com/package/@auto-skeleton/lit) | Lit / Web Component |
 | [`@auto-skeleton/core`](https://www.npmjs.com/package/@auto-skeleton/core) | Framework-agnostic DOM scanner |
 
@@ -89,6 +91,15 @@ html`
     </div>
   </auto-skeleton>
 `
+```
+
+## Quick start (Vue 3)
+
+```vue
+<!-- Vue 3 -->
+<AutoSkeleton id="profile" :loading="isLoading">
+  <ProfileCard />
+</AutoSkeleton>
 ```
 
 On first load, auto-skeleton scans the rendered DOM, extracts bone positions, and caches them. Every subsequent load shows the skeleton immediately — no layout shift.
@@ -234,6 +245,20 @@ Requires `MutationObserver`, `ResizeObserver`, and `sessionStorage`.
 
 ---
 
+## Coming soon
+
+- **React Native** — `@auto-skeleton/react-native`
+
+---
+
+## Contributors
+
+- [@riazzahmedm](https://github.com/riazzahmedm)
+- [@kishore-s-n](https://github.com/kishore-s-n)
+- [@chithumonk](https://github.com/chithumonk)
+
+---
+
 ## Contributing
 
 ```bash
@@ -244,3 +269,9 @@ npm run demo:dev     # start the demo
 npm test             # run tests
 npm run build        # build all packages
 ```
+
+---
+
+## Keywords
+
+skeleton loader, react skeleton, vue skeleton, lit skeleton, web components skeleton, zero-config, runtime DOM scanning, shimmer, placeholder, auto skeleton
