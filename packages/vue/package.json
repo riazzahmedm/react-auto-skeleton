@@ -46,7 +46,7 @@
     "@auto-skeleton/core": "0.0.5"
   },
   "devDependencies": {
-    "@vitejs/plugin-vue": "^5.0.0",
+    "@vitejs/plugin-vue": "^5.2.4",
     "vite": "^5.0.0",
     "vite-plugin-dts": "^4.0.0",
     "vue": "^3.4.0",
