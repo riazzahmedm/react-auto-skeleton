@@ -172,9 +172,28 @@ import type { AutoSkeletonOptions } from '@auto-skeleton/lit';
 
 ## Contributors
 
-- [@riazzahmedm](https://github.com/riazzahmedm)
-- [@kishore-s-n](https://github.com/kishore-s-n)
-- [@chithumonk](https://github.com/chithumonk)
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/riazzahmedm">
+        <img src="https://github.com/riazzahmedm.png?size=100" width="72" alt="riazzahmedm" /><br />
+        <sub><b>@riazzahmedm</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/kishore-s-n">
+        <img src="https://github.com/kishore-s-n.png?size=100" width="72" alt="kishore-s-n" /><br />
+        <sub><b>@kishore-s-n</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/chithumonk">
+        <img src="https://github.com/chithumonk.png?size=100" width="72" alt="chithumonk" /><br />
+        <sub><b>@chithumonk</b></sub>
+      </a>
+    </td>
+  </tr>
+</table>
 
 ## License
 
