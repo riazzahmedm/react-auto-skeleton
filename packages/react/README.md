@@ -142,6 +142,12 @@ Returns `ref` (attach to container), `bones` (array of detected bone objects), `
 | [`@auto-skeleton/lit`](https://www.npmjs.com/package/@auto-skeleton/lit) | Lit / Web Component |
 | [`@auto-skeleton/core`](https://www.npmjs.com/package/@auto-skeleton/core) | Framework-agnostic DOM scanner |
 
+## Contributors
+
+- [@riazzahmedm](https://github.com/riazzahmedm)
+- [@kishore-s-n](https://github.com/kishore-s-n)
+- [@chithumonk](https://github.com/chithumonk)
+
 ## License
 
 MIT
