@@ -1,6 +1,6 @@
 {
   "name": "@auto-skeleton/vue",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "Zero-config skeleton loaders for Vue 3. Scans the live DOM at runtime — no manual shapes, no CLI, no config files.",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
